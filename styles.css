@@ -60,28 +60,27 @@ body {
 .hero {
   max-width: 900px;
   margin: 0 auto;
-  padding: 88px 24px 40px;
-  text-align: center;
+  padding: 88px 24px 8px;
+  text-align: left;
+}
+.hero__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero__logo {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
 }
 .hero__mark {
   font-family: var(--mono);
   text-transform: uppercase;
   letter-spacing: 0.32em;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--accent);
-}
-.hero__title {
-  font-size: clamp(28px, 5vw, 46px);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.015em;
-  margin: 16px 0 10px;
-}
-.hero__sub {
-  font-size: 17px;
-  color: var(--muted);
-  margin: 0;
 }
 
 .catalog {
