@@ -60,7 +60,7 @@ body {
 .hero {
   max-width: 900px;
   margin: 0 auto;
-  padding: 88px 24px 8px;
+  padding: 40px 24px 0;
   text-align: left;
 }
 .hero__brand {
@@ -86,7 +86,7 @@ body {
 .catalog {
   max-width: 900px;
   margin: 0 auto;
-  padding: 24px 24px 96px;
+  padding: 0 24px 96px;
 }
 .loading {
   color: var(--muted);
@@ -94,7 +94,7 @@ body {
 }
 
 .concept {
-  margin-top: 48px;
+  margin-top: 32px;
 }
 .concept__name {
   font-family: var(--mono);
