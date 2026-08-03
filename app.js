@@ -22,14 +22,17 @@ function courseCard(slug, course) {
   const a = el('a', 'course')
   a.href = `${slug}/#/${course.id}`
   a.appendChild(el('span', 'course__title', course.title))
-  const n = course.sections
-  a.appendChild(el('span', 'course__meta', `${n} section${n === 1 ? '' : 's'}`))
+  // Meta line intentionally omitted for now — reserved for a future "time to read" length cue.
   return a
 }
 
 function conceptBlock(name, slug, courses) {
   const section = el('section', 'concept')
-  section.appendChild(el('h2', 'concept__name', name))
+  const heading = el('h2', 'concept__name')
+  const link = el('a', 'concept__link', name)
+  link.href = `${slug}/` // the concept's own index (graphl.in/<slug>/)
+  heading.appendChild(link)
+  section.appendChild(heading)
   const grid = el('div', 'concept__grid')
   if (courses && courses.length) {
     for (const c of courses) grid.appendChild(courseCard(slug, c))
