@@ -1,0 +1,13 @@
+{
+  "name": "graphl-capture",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Concept-agnostic 4K video recorder for GraphL courses — drives a concept app's ?capture=1 mode.",
+  "scripts": {
+    "record": "node record-course.mjs"
+  },
+  "dependencies": {
+    "puppeteer": "^25.3.0"
+  }
+}

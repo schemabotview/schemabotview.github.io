@@ -35,6 +35,16 @@ concepts.json the concept list
   Actions).
 - Preserve `CNAME` and `.nojekyll` on every change.
 
+## `capture/` — the video recorder (dev-only, not served)
+
+`capture/` holds the GraphL **recorder** (`record-course.mjs`): it deep-drives a concept app in
+headless Chrome and renders a course to a 4K MP4 — one concat-safe segment per beat, with a
+per-section **bell lead-in** + **transition pan**. It is dev tooling that happens to live here; the
+branch-deploy Pages site never serves it (`.gitignore` excludes `capture/{node_modules,.tmp,segments,
+out}/`). See **`capture/README.md`** for the full contract, env knobs, and the local-engine-test
+gotcha. The camera surface it drives (`window.__capture` `plan`/`seek`/`transition`) lives in the
+engine — see `../flow-engine/CLAUDE.md`.
+
 ## Add a concept to the catalog
 
 1. The concept app must be **deployed** (serving `graphl.in/<slug>/`) and publishing `courses.json`.
