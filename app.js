@@ -18,12 +18,21 @@ function el(tag, className, text) {
   return node
 }
 
-function courseCard(slug, course) {
+// A course row in the concept's ordered list: a number badge, the title, and the section
+// count. Courses within a concept are a *sequence* (take them in order), so they render as a
+// numbered list — matching each concept app's own landing page. (courses.json carries no blurb,
+// so the catalog shows title + count; the per-concept app landing adds the descriptions.)
+function courseRow(slug, course, n) {
+  const li = el('li', 'course-item')
   const a = el('a', 'course')
   a.href = `${slug}/#/${course.id}`
+  a.appendChild(el('span', 'course__num', String(n)))
   a.appendChild(el('span', 'course__title', course.title))
-  // Meta line intentionally omitted for now — reserved for a future "time to read" length cue.
-  return a
+  if (typeof course.sections === 'number') {
+    a.appendChild(el('span', 'course__meta', `${course.sections} sections`))
+  }
+  li.appendChild(a)
+  return li
 }
 
 function conceptBlock(name, slug, courses) {
@@ -33,13 +42,13 @@ function conceptBlock(name, slug, courses) {
   link.href = `${slug}/` // the concept's own index (graphl.in/<slug>/)
   heading.appendChild(link)
   section.appendChild(heading)
-  const grid = el('div', 'concept__grid')
+  const list = el('ol', 'concept__list')
   if (courses && courses.length) {
-    for (const c of courses) grid.appendChild(courseCard(slug, c))
+    courses.forEach((c, i) => list.appendChild(courseRow(slug, c, i + 1)))
   } else {
-    grid.appendChild(el('p', 'concept__empty', 'No courses published yet.'))
+    list.appendChild(el('li', 'concept__empty', 'No courses published yet.'))
   }
-  section.appendChild(grid)
+  section.appendChild(list)
   return section
 }
 
