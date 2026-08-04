@@ -1,0 +1,10 @@
+{
+  "_comment": "Display titles for published videos (YouTube title + thumbnail + description header). Keyed by <concept>/<course>. Falls back to the course title in courses.json when absent. Used by gen-descriptions.mjs; thumb.mjs can read it too to drop its --title flags.",
+  "apache-spark": {
+    "evolution": "Spark Evolution",
+    "spark-architecture": "Spark Architecture",
+    "spark-api": "Spark API",
+    "spark-streaming": "Spark Streaming",
+    "capstone": "Spark Project"
+  }
+}
