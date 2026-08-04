@@ -152,12 +152,21 @@ body {
   font-size: 15px;
   font-weight: 600;
 }
-.course__title {
-  flex: 1;
+.course__text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
   min-width: 0;
+  flex: 1;
+}
+.course__title {
   font-size: 19px;
   font-weight: 600;
   color: var(--text);
+}
+.course__blurb {
+  font-size: 14px;
+  color: var(--muted);
 }
 .course__meta {
   flex: none;

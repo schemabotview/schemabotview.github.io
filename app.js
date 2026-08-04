@@ -18,16 +18,19 @@ function el(tag, className, text) {
   return node
 }
 
-// A course row in the concept's ordered list: a number badge, the title, and the section
-// count. Courses within a concept are a *sequence* (take them in order), so they render as a
-// numbered list — matching each concept app's own landing page. (courses.json carries no blurb,
-// so the catalog shows title + count; the per-concept app landing adds the descriptions.)
+// A course row in the concept's ordered list: a number badge, the title + one-line blurb, and
+// the section count. Courses within a concept are a *sequence* (take them in order), so they
+// render as a numbered list — identical to each concept app's own landing page. Title/blurb/
+// count all come from the concept's courses.json (blurb emitted by its gen-courses build).
 function courseRow(slug, course, n) {
   const li = el('li', 'course-item')
   const a = el('a', 'course')
   a.href = `${slug}/#/${course.id}`
   a.appendChild(el('span', 'course__num', String(n)))
-  a.appendChild(el('span', 'course__title', course.title))
+  const text = el('span', 'course__text')
+  text.appendChild(el('span', 'course__title', course.title))
+  if (course.blurb) text.appendChild(el('span', 'course__blurb', course.blurb))
+  a.appendChild(text)
   if (typeof course.sections === 'number') {
     a.appendChild(el('span', 'course__meta', `${course.sections} sections`))
   }
