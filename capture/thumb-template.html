@@ -23,12 +23,13 @@
     content: ''; position: absolute; top: 0; right: 0; width: 8%; height: 100%;
     background: linear-gradient(90deg, rgba(30,33,39,0), rgba(30,33,39,0.55));
   }
-  /* RIGHT — the branded panel. Spark burnt-orange gradient (brand #E25A1C family). */
+  /* RIGHT — the branded panel. Gradient is per-concept (thumb.mjs substitutes {{PANEL_BG}}):
+     apache-spark = burnt-orange, sql = database blue, etc. */
   .thumb__panel {
     flex: 1; position: relative; display: flex; flex-direction: column;
     padding: 6.4vh 3.8vw;
     color: #fff;
-    background: radial-gradient(118% 104% at 70% 34%, #d76b35 0%, #a94a20 46%, #6a2d14 100%);
+    background: {{PANEL_BG}};
   }
   .thumb__kicker {
     font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;

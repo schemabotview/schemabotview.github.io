@@ -42,6 +42,15 @@ const FFMPEG =
 
 const TEMPLATE = join(here, 'thumb-template.html')
 const LOGO_SVG = join(here, '..', '..', 'apache-spark', 'public', 'icon.svg') // the GraphL mark
+
+// Per-concept panel gradient (the right-side brand block). Each concept gets its OWN accent so the
+// thumbnails don't all wear one concept's brand color; DEFAULT covers anything unlisted. Same radial
+// geometry across concepts (only the color stops change) so the poster look stays consistent.
+const PANEL_BG_BY_CONCEPT = {
+  'apache-spark': 'radial-gradient(118% 104% at 70% 34%, #d76b35 0%, #a94a20 46%, #6a2d14 100%)', // burnt-orange (Spark)
+  sql: 'radial-gradient(118% 104% at 70% 34%, #4a90d9 0%, #2456a6 46%, #14284f 100%)', // database blue
+}
+const DEFAULT_PANEL_BG = 'radial-gradient(118% 104% at 70% 34%, #5b8cff 0%, #2f4a94 46%, #16203f 100%)'
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 // A slug → display fallback ("spark-architecture" → "Spark Architecture") when courses.json lacks it.
 const titleCase = (slug) => slug.split(/[-_]/).map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
@@ -49,7 +58,7 @@ const titleCase = (slug) => slug.split(/[-_]/).map((w) => w.charAt(0).toUpperCas
 // ---- CLI --------------------------------------------------------------------------------
 function parse(argv) {
   const pos = []
-  const opt = { section: 0, beat: 0, at: 1200, out: null, full4k: false, title: null, kicker: null, number: null }
+  const opt = { section: 0, beat: 0, at: 1200, out: null, full4k: false, title: null, kicker: null, number: null, panel: null }
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i]
     if (a === '--section') opt.section = +argv[++i]
@@ -59,6 +68,7 @@ function parse(argv) {
     else if (a === '--title') opt.title = argv[++i]
     else if (a === '--kicker') opt.kicker = argv[++i]
     else if (a === '--number') opt.number = argv[++i]
+    else if (a === '--panel') opt.panel = argv[++i]
     else if (a === '--full4k') opt.full4k = true
     else pos.push(a)
   }
@@ -154,6 +164,7 @@ async function makeThumb(concept, course, opt) {
     const title = opt.title ?? meta.title ?? titleCase(course)
     const numberHtml = opt.number ? `<div class="thumb__number">${esc(opt.number)}</div>` : ''
     const logoSvg = readFileSync(LOGO_SVG, 'utf8').replace('<svg ', '<svg class="thumb__logo" ')
+    const panelBg = opt.panel ?? PANEL_BG_BY_CONCEPT[concept] ?? DEFAULT_PANEL_BG
 
     const html = readFileSync(TEMPLATE, 'utf8')
       .replaceAll('{{SCENE}}', sceneUri)
@@ -161,6 +172,7 @@ async function makeThumb(concept, course, opt) {
       .replaceAll('{{NUMBER}}', numberHtml)
       .replaceAll('{{TITLE}}', esc(title))
       .replaceAll('{{LOGO}}', logoSvg)
+      .replaceAll('{{PANEL_BG}}', panelBg)
 
     // Composite IN the app page so the panel inherits the loaded Plex fonts: replace only the BODY
     // (keeping the head's @fontsource @font-face rules), then wait for the fonts + a layout tick.
@@ -187,7 +199,7 @@ async function makeThumb(concept, course, opt) {
 const { pos, opt } = parse(process.argv.slice(2))
 const [concept, course] = pos
 if (!concept || !course) {
-  console.error('usage: node thumb.mjs <concept> <course> [--section N] [--beat N] [--title T] [--kicker K] [--number NN] [--out file] [--full4k] [--at ms]')
+  console.error('usage: node thumb.mjs <concept> <course> [--section N] [--beat N] [--title T] [--kicker K] [--number NN] [--panel css-gradient] [--out file] [--full4k] [--at ms]')
   process.exit(2)
 }
 makeThumb(concept, course, opt).catch((e) => {

@@ -6,5 +6,12 @@
     "spark-api": "Spark API",
     "spark-streaming": "Spark Streaming",
     "capstone": "Spark Project"
+  },
+  "sql": {
+    "schema": "SQL Data Modeling",
+    "queries": "SQL Queries",
+    "mutations": "SQL Transactions",
+    "engine": "SQL Internals",
+    "capstone": "SQL Project"
   }
 }

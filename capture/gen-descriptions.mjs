@@ -30,7 +30,13 @@ const readJson = (f) => { try { return JSON.parse(readFileSync(f, 'utf8')) } cat
 const STING_MS = process.env.NO_STING ? 0 : process.env.STING_MS ? +process.env.STING_MS : 2800
 const TAIL_MS = process.env.TAIL_MS ? +process.env.TAIL_MS : 400
 const CIRCLED = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩']
-const HASHTAGS = '#ApacheSpark #Spark #BigData #DataEngineering #PySpark #Databricks #DataPipeline'
+// Hashtags are per-concept (a Spark video shouldn't carry SQL tags, and vice-versa). Add an entry
+// when a new concept ships; DEFAULT covers anything unlisted.
+const HASHTAGS_BY_CONCEPT = {
+  'apache-spark': '#ApacheSpark #Spark #BigData #DataEngineering #PySpark #Databricks #DataPipeline',
+  sql: '#SQL #Database #RelationalDatabase #DataEngineering #PostgreSQL #DataAnalysis #Backend',
+}
+const DEFAULT_HASHTAGS = '#GraphL #Programming #ComputerScience #SoftwareEngineering'
 const SITE = 'https://graphl.in'
 
 const titleCase = (slug) => slug.split(/[-_]/).map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
@@ -71,7 +77,7 @@ async function startDevServer(conceptDir) {
 // lines) so grouping survives even if YouTube trims empty lines on paste; chapters stay one-per-line
 // (required for auto-chapters) and each series entry is a single line ending in its URL (clickable).
 const RULE = '━━━━━━━━━━━━━━━━'
-function compose({ concept, conceptName, course, displayOf, blurbOf, chapters, series }) {
+function compose({ concept, conceptName, course, displayOf, blurbOf, chapters, series, hashtags }) {
   const L = []
   L.push(`${displayOf(course)} · ${conceptName}`)
   L.push(RULE)
@@ -90,7 +96,7 @@ function compose({ concept, conceptName, course, displayOf, blurbOf, chapters, s
   L.push(`🔗 Watch interactively on GraphL → ${SITE}/${concept}/#/${course}`)
   L.push(`🌐 More concepts → ${SITE}`)
   L.push(RULE)
-  L.push(HASHTAGS)
+  L.push(hashtags)
   return L.join('\n') + '\n'
 }
 
@@ -146,7 +152,8 @@ async function main() {
         }
       }
 
-      const text = compose({ concept, conceptName, course, displayOf, blurbOf, chapters, series })
+      const hashtags = HASHTAGS_BY_CONCEPT[concept] ?? DEFAULT_HASHTAGS
+      const text = compose({ concept, conceptName, course, displayOf, blurbOf, chapters, series, hashtags })
       const out = join(outDir, `${course}.txt`)
       writeFileSync(out, text)
       console.log(`✅ ${out}   (${chapters.length} chapters, ${stamp(t)} total)`)

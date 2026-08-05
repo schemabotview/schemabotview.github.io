@@ -245,6 +245,26 @@ async function recordCourse(concept, course, { force = false, only = [] } = {}) 
 
         const webm = join(tmp, `${tag}.webm`)
         const recorder = await page.screencast({ path: webm })
+        // Keep the compositor emitting frames for the whole hold. CDP screencast only produces a
+        // frame on a VISUAL CHANGE, so an otherwise-static beat — e.g. a scene's first section,
+        // which has no transition pan to animate — records an EMPTY webm (0 frames), and the mux
+        // then fails. A 1px, ~1%-opacity speck nudged every animation frame keeps frames flowing;
+        // at 4K that single sub-perceptible pixel is quantized away by x264. Removed on stop.
+        await page.evaluate(() => {
+          const d = document.createElement('div')
+          d.id = '__cap_keepalive'
+          d.style.cssText =
+            'position:fixed;left:0;top:0;width:1px;height:1px;background:#888;opacity:0.01;' +
+            'pointer-events:none;z-index:2147483647;will-change:transform'
+          document.body.appendChild(d)
+          let x = 0
+          const loop = () => {
+            x = (x + 3) % 30
+            d.style.transform = `translate3d(${x}px,0,0)`
+            window.__cap_raf = requestAnimationFrame(loop)
+          }
+          loop()
+        })
         if (canPan) {
           await page.evaluate(({ s, b, ms }) => window.__capture.transition(s, b, ms),
             { s: sec.section, b: beat, ms: PAN_MS })
@@ -254,6 +274,10 @@ async function recordCourse(concept, course, { force = false, only = [] } = {}) 
         console.log(`  §${sec.section} ${sec.id} b${beat}  ▶ record (${lead}${dur.toFixed(1)}s)`)
         await sleep(Math.round(total * 1000))
         await recorder.stop()
+        await page.evaluate(() => {
+          if (window.__cap_raf) cancelAnimationFrame(window.__cap_raf)
+          document.getElementById('__cap_keepalive')?.remove()
+        })
 
         // Segment audio: the section-start bell lead + this beat's clip; mirrors the video hold.
         let segAudio = clip
