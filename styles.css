@@ -50,6 +50,9 @@ html,
 body {
   margin: 0;
 }
+html {
+  scroll-behavior: smooth;
+}
 body {
   background: var(--bg);
   color: var(--text);
@@ -93,8 +96,57 @@ body {
   text-align: center;
 }
 
+/* Sticky jump-nav: a full-bleed strip of concept chips (a body-level sibling, so its border and
+   backdrop span the viewport, not the 900px column). Keeps every course visible while making a
+   long, multi-concept page navigable in one click. */
+.concept-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(30, 33, 39, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.concept-nav__inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none; /* the strip scrolls horizontally when concepts overflow; hide the bar */
+}
+.concept-nav__inner::-webkit-scrollbar {
+  display: none;
+}
+.concept-nav__link {
+  flex: none;
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.concept-nav__link:hover {
+  color: var(--text);
+  background: var(--panel);
+}
+.concept-nav__link.is-active {
+  color: var(--accent);
+  background: rgba(91, 140, 255, 0.08);
+  border-color: rgba(91, 140, 255, 0.4);
+}
+
 .concept {
   margin-top: 32px;
+  scroll-margin-top: 60px; /* clear the sticky nav when a chip scrolls to a section */
 }
 .concept__name {
   font-family: var(--mono);
