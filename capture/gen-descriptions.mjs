@@ -35,6 +35,7 @@ const CIRCLED = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', 
 const HASHTAGS_BY_CONCEPT = {
   'apache-spark': '#ApacheSpark #Spark #BigData #DataEngineering #PySpark #Databricks #DataPipeline',
   sql: '#SQL #Database #RelationalDatabase #DataEngineering #PostgreSQL #DataAnalysis #Backend',
+  python: '#Python #LearnPython #PythonProgramming #Coding #Programming #ComputerScience #SoftwareEngineering',
 }
 const DEFAULT_HASHTAGS = '#GraphL #Programming #ComputerScience #SoftwareEngineering'
 const SITE = 'https://graphl.in'
@@ -81,7 +82,7 @@ function compose({ concept, conceptName, course, displayOf, blurbOf, chapters, s
   const L = []
   L.push(`${displayOf(course)} · ${conceptName}`)
   L.push(RULE)
-  const blurb = blurbOf(course)
+  const blurb = (blurbOf(course) || '').trim().replace(/\.$/, '') // strip a trailing period so we don't double it
   L.push(`${blurb ? blurb + '. ' : ''}Part of GraphL's ${conceptName} series — the left-pane diagram assembles beat-by-beat, in sync with the narration.`)
   L.push(RULE)
   L.push('⏱ CHAPTERS')

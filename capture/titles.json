@@ -13,5 +13,15 @@
     "mutations": "SQL Transactions",
     "engine": "SQL Internals",
     "capstone": "SQL Project"
+  },
+  "python": {
+    "setup": "Python Runtime",
+    "syntax": "Python Syntax",
+    "data": "Python Data Structures",
+    "oop": "Python OOP",
+    "idioms": "Python Idioms",
+    "stdlib": "Python Standard Library",
+    "concurrency": "Python Concurrency",
+    "project": "Python Project"
   }
 }
