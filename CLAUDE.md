@@ -8,14 +8,11 @@ no framework, no build.
 
 ## What it does
 
-`app.js` (vanilla ES module) on load:
-1. fetches `concepts.json` — the concepts to show (`[{ slug, name }]`),
-2. fetches each concept's **`courses.json`** at `/<slug>/courses.json` (published by that concept
-   app's build), shape `{ concept, courses: [{ id, title, sections }] }`,
-3. renders a gallery; each course links to `/<slug>/#/<courseId>`.
-
-Everything is **same-origin under `graphl.in`** (the index and every concept app share the apex
-domain), so the `courses.json` fetches need no CORS.
+`app.js` (vanilla ES module) on load fetches `concepts.json` — the concepts to show
+(`[{ slug, name }]`) — and renders a gallery of links, one card per concept, pointing at that
+concept's own site (`/<slug>/`). The index does **not** fetch or list courses/sections: each concept
+site owns its own course navigation. Everything is **same-origin under `graphl.in`** (the index and
+every concept site share the apex domain).
 
 ## Files (all served as-is)
 
@@ -24,7 +21,7 @@ CNAME         graphl.in   ← the custom domain. DO NOT DELETE (removing it brea
 .nojekyll     disable Jekyll (serve files verbatim)
 index.html    hero + <main id="catalog">
 styles.css    dark theme, matches the concept apps
-app.js        fetch concepts.json + courses.json → render cards
+app.js        fetch concepts.json → render one link card per concept (→ /<slug>/)
 concepts.json the concept list
 ```
 
@@ -47,9 +44,13 @@ engine — see `../flow-engine/CLAUDE.md`.
 
 ## Add a concept to the catalog
 
-1. The concept app must be **deployed** (serving `graphl.in/<slug>/`) and publishing `courses.json`.
-2. Add `{ "slug": "<slug>", "name": "<Name>" }` to `concepts.json`; push. Its courses appear
-   automatically — the index does not hard-code course lists (only the concept slugs).
+1. The concept app must be **deployed** (serving `graphl.in/<slug>/`). Vite/TS concept apps deploy
+   via a GitHub Actions Pages workflow in their own repo (build → deploy `dist/`); see
+   `aws-content`'s `.github/workflows/deploy.yml` for the reference. The apex custom domain is
+   inherited from this repo's `CNAME`, so a project repo published under the org serves at
+   `graphl.in/<repo>/` — the repo name is the slug.
+2. Add `{ "slug": "<slug>", "name": "<Name>" }` to `concepts.json`; push. Its card appears in the
+   gallery, linking to `graphl.in/<slug>/`.
 
 ## Notes
 

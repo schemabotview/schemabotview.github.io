@@ -1,19 +1,16 @@
 # schemabotview.github.io → graphl.in
 
 The public **catalog** for [GraphL](https://graphl.in): a static index that lists every concept and
-its courses, linking to each course in its concept app.
+links to its site.
 
 Live at **https://graphl.in**.
 
 ## How it works
 
-A pure static site (no build). On load, `app.js`:
-
-1. fetches `concepts.json` — the list of published concepts,
-2. fetches each concept's `courses.json` (served by that concept app at `graphl.in/<slug>/courses.json`),
-3. renders a gallery, linking each course to `graphl.in/<slug>/#/<courseId>`.
-
-All same-origin under `graphl.in`, so no CORS.
+A pure static site (no build). On load, `app.js` fetches `concepts.json` — the list of published
+concepts — and renders a gallery of links, one card per concept, pointing at that concept's own site
+(`graphl.in/<slug>/`). The index doesn't fetch or list courses; each concept site owns its own
+course navigation. All same-origin under `graphl.in`.
 
 ## Files
 
@@ -28,10 +25,11 @@ concepts.json    [ { "slug": "apache-spark", "name": "Apache Spark" }, … ]
 
 ## Add a concept to the catalog
 
-1. Deploy the concept app (it publishes `courses.json` at `graphl.in/<slug>/`).
+1. Deploy the concept app so it serves at `graphl.in/<slug>/` (Vite/TS apps deploy via a GitHub
+   Actions Pages workflow in their own repo — see `aws-content`).
 2. Add `{ "slug": "<slug>", "name": "<Name>" }` to `concepts.json` and push.
 
-Its courses appear automatically (fetched at load).
+Its card appears in the gallery, linking to `graphl.in/<slug>/`.
 
 ## Deploy
 
