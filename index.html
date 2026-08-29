@@ -12,14 +12,14 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header class="hero">
-      <div class="hero__brand">
-        <img class="hero__logo" src="icon.svg" alt="" width="30" height="30" />
-        <span class="hero__mark">GraphL</span>
-      </div>
-    </header>
-    <main id="catalog" class="catalog">
-      <p class="loading">Loading catalog…</p>
+    <main class="idx">
+      <header class="idx__head">
+        <span class="idx__brand">GraphL</span>
+        <h1 class="idx__subject">Visual courses</h1>
+      </header>
+      <ol id="catalog" class="idx__grid">
+        <li class="idx__empty">Loading catalog…</li>
+      </ol>
     </main>
     <script type="module" src="app.js"></script>
   </body>

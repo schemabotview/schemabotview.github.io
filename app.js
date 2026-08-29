@@ -19,16 +19,18 @@ function el(tag, className, text) {
   return node
 }
 
-// A concept row: a card linking into the concept's own site (graphl.in/<slug>/). Reuses the shared
-// card visual vocabulary (.course*) so the index stays consistent with each concept app's landing.
-function conceptCard(concept) {
-  const li = el('li')
-  const a = el('a', 'course')
+// A concept row: a numbered card linking into the concept's own site (graphl.in/<slug>/). Reuses the
+// concept apps' landing vocabulary (.idx-card*) — number box · title · arrow — so the root catalog
+// and each concept index read as one system. `i` is the zero-based position → the 01, 02… label.
+function conceptCard(concept, i) {
+  const li = el('li', 'idx-card')
+  const a = el('a', 'idx-card__link')
   a.href = `${concept.slug}/`
-  const text = el('span', 'course__text')
-  text.appendChild(el('span', 'course__title', concept.name ?? concept.slug))
-  a.appendChild(text)
-  a.appendChild(el('span', 'course__meta', '→'))
+  a.appendChild(el('span', 'idx-card__num', String(i + 1).padStart(2, '0')))
+  a.appendChild(el('span', 'idx-card__title', concept.name ?? concept.slug))
+  const arrow = el('span', 'idx-card__arrow', '→')
+  arrow.setAttribute('aria-hidden', 'true')
+  a.appendChild(arrow)
   li.appendChild(a)
   return li
 }
@@ -38,12 +40,10 @@ async function main() {
   try {
     concepts = await getJSON('concepts.json')
   } catch {
-    CATALOG.replaceChildren(el('p', 'loading', 'Catalog unavailable.'))
+    CATALOG.replaceChildren(el('li', 'idx__empty', 'Catalog unavailable.'))
     return
   }
-  const list = el('ul', 'concept__list')
-  concepts.forEach((c) => list.appendChild(conceptCard(c)))
-  CATALOG.replaceChildren(list)
+  CATALOG.replaceChildren(...concepts.map((c, i) => conceptCard(c, i)))
 }
 
 main()

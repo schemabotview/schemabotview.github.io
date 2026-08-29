@@ -1,5 +1,6 @@
-/* GraphL catalog — the "Zed slate" theme (canonical tokens in the workspace CLAUDE.md),
-   matched to the concept apps. Pure static: fonts are self-hosted woff2 (see /fonts). */
+/* GraphL catalog — the "Zed slate" theme (canonical tokens in the workspace CLAUDE.md), matched to
+   the concept apps: the root catalog reuses each concept index's landing vocabulary (.idx*) so the
+   two read as one system. Pure static: fonts are self-hosted woff2 (see /fonts). */
 
 @font-face {
   font-family: 'IBM Plex Sans';
@@ -33,14 +34,10 @@
 }
 
 :root {
-  --bg: #1e2127; /* Zed-slate page ground */
-  --panel: #2f333d; /* card surface, lifted off the ground */
-  --panel-hover: #363b46;
-  --line: rgba(255, 255, 255, 0.08);
+  --bg: #1a1d23; /* Zed-slate page ground (matches the concept apps' index) */
   --text: #eceef2;
-  --muted: #8b909c;
-  --accent: #5b8cff; /* driver-blue, the saturated role accent */
-  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --accent: #5b8cff; /* platform blue — the root catalog's role accent (each concept index uses its
+                        own brand color; blue marks the platform root) */
 }
 
 * {
@@ -50,9 +47,6 @@ html,
 body {
   margin: 0;
 }
-html {
-  scroll-behavior: smooth;
-}
 body {
   background: var(--bg);
   color: var(--text);
@@ -60,179 +54,105 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.hero {
-  max-width: 900px;
+/* The catalog page — same shape as each concept app's landing (src/CourseIndex + .idx* in its
+   index.css): a brand eyebrow over a big subject title, then a single column of cards. */
+.idx {
+  --idx-accent: var(--accent);
+  --idx-muted: #8b909c;
+  --idx-line: rgba(255, 255, 255, 0.09);
+  min-height: 100vh;
+  max-width: 940px;
   margin: 0 auto;
-  padding: 40px 24px 0;
-  text-align: left;
+  padding: 40px 32px 64px;
 }
-.hero__brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
+.idx__head {
+  margin-bottom: 36px;
 }
-.hero__logo {
-  display: block;
-  width: 30px;
-  height: 30px;
-  border-radius: 7px;
-}
-.hero__mark {
-  font-family: var(--mono);
-  text-transform: uppercase;
-  letter-spacing: 0.32em;
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--accent);
-}
-
-.catalog {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 24px 96px;
-}
-.loading {
-  color: var(--muted);
-  text-align: center;
-}
-
-/* Sticky jump-nav: a full-bleed strip of concept chips (a body-level sibling, so its border and
-   backdrop span the viewport, not the 900px column). Keeps every course visible while making a
-   long, multi-concept page navigable in one click. */
-.concept-nav {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: rgba(30, 33, 39, 0.82);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
-}
-.concept-nav__inner {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 10px 24px;
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  scrollbar-width: none; /* the strip scrolls horizontally when concepts overflow; hide the bar */
-}
-.concept-nav__inner::-webkit-scrollbar {
-  display: none;
-}
-.concept-nav__link {
-  flex: none;
-  font-family: var(--mono);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 12px;
-  color: var(--muted);
-  text-decoration: none;
-  padding: 6px 13px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  white-space: nowrap;
-  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-}
-.concept-nav__link:hover {
-  color: var(--text);
-  background: var(--panel);
-}
-.concept-nav__link.is-active {
-  color: var(--accent);
-  background: rgba(91, 140, 255, 0.08);
-  border-color: rgba(91, 140, 255, 0.4);
-}
-
-.concept {
-  margin-top: 32px;
-  scroll-margin-top: 60px; /* clear the sticky nav when a chip scrolls to a section */
-}
-.concept__name {
-  font-family: var(--mono);
+.idx__brand {
+  display: inline-block;
   font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--muted);
-  margin: 0 0 16px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--line);
+  color: var(--idx-accent);
+  margin-bottom: 10px;
 }
-.concept__link {
-  color: inherit;
-  text-decoration: none;
-  transition: color 0.15s ease;
+.idx__subject {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
 }
-.concept__link:hover {
-  color: var(--text);
+.idx__empty {
+  color: var(--idx-muted);
+  font-size: 16px;
+  list-style: none;
 }
-/* Ordered course list — courses within a concept are a sequence, so a numbered list (matches
-   each concept app's own landing). */
-.concept__list {
+
+/* Concepts grid — a single column of cards (mirrors the concept index's course accordions, but each
+   card is a plain link into that concept's own site rather than an expandable accordion). */
+.idx__grid {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  gap: 12px;
 }
-.course {
-  display: flex;
+.idx-card {
+  border: 1px solid var(--idx-line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.018);
+  overflow: hidden;
+}
+/* The whole card is one link: number box · concept title · arrow (matches .idx-card__head's row). */
+.idx-card__link {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 18px;
-  padding: 16px 20px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--panel);
+  padding: 20px 24px;
   text-decoration: none;
-  transition: border-color 0.15s ease, background 0.15s ease;
+  color: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
-.course:hover {
-  border-color: rgba(91, 140, 255, 0.6);
-  background: var(--panel-hover);
+.idx-card__link:hover {
+  background: #22262e;
 }
-.course__num {
-  flex: none;
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 9px;
-  background: rgba(91, 140, 255, 0.12);
-  color: #5b8cff;
-  font-family: var(--mono);
-  font-size: 15px;
-  font-weight: 600;
+.idx-card__num {
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--idx-accent);
+  border: 1px solid var(--idx-accent);
+  border-radius: 8px;
+  padding: 5px 8px;
+  line-height: 1;
 }
-.course__text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+.idx-card__title {
   min-width: 0;
-  flex: 1;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
-.course__title {
-  font-size: 19px;
-  font-weight: 600;
-  color: var(--text);
-}
-.course__blurb {
-  font-size: 14px;
-  color: var(--muted);
-}
-.course__meta {
+.idx-card__arrow {
   flex: none;
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--muted);
-  white-space: nowrap;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--idx-muted);
+  transition: transform 0.15s ease, color 0.15s ease;
 }
-.concept__empty {
-  color: var(--muted);
-  font-size: 14px;
+.idx-card__link:hover .idx-card__arrow {
+  color: var(--idx-accent);
+  transform: translateX(3px);
 }
+
 @media (max-width: 560px) {
-  .course__meta {
-    display: none;
+  .idx {
+    padding: 32px 20px 48px;
+  }
+  .idx__subject {
+    font-size: 32px;
   }
 }
