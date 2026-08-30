@@ -32,15 +32,13 @@ concepts.json the concept list
   Actions).
 - Preserve `CNAME` and `.nojekyll` on every change.
 
-## `capture/` — the video recorder (dev-only, not served)
+## Recording lives in the concept repos (not here)
 
-`capture/` holds the GraphL **recorder** (`record-course.mjs`): it deep-drives a concept app in
-headless Chrome and renders a course to a 4K MP4 — one concat-safe segment per beat, with a
-per-section **bell lead-in** + **transition pan**. It is dev tooling that happens to live here; the
-branch-deploy Pages site never serves it (`.gitignore` excludes `capture/{node_modules,.tmp,segments,
-out}/`). See **`capture/README.md`** for the full contract, env knobs, and the local-engine-test
-gotcha. The camera surface it drives (`window.__capture` `plan`/`seek`/`transition`) lives in the
-engine — see `../flow-engine/CLAUDE.md`.
+This repo is **only** the catalog. Video recording is done **per concept**: each concept repo ships
+its own `scripts/record-course.mjs` (+ `record-reels`, `thumb`, `gen-descriptions`), driving that
+app's `window.__scene` surface from its bundled `src/render-engine`. There is no central recorder
+here — a former `capture/` folder (a different `window.__capture` recorder) was removed; its curated
+publish titles were split into each repo's `scripts/titles.json`.
 
 ## Add a concept to the catalog
 
@@ -54,6 +52,9 @@ engine — see `../flow-engine/CLAUDE.md`.
 
 ## Notes
 
+- **Currently listed:** `aws`, `apache-spark`, `python` — the deployed apps. `linux` and `sql` are
+  intentionally **omitted** until scaffolded + deployed (docs-only stubs in the workspace); listing an
+  undeployed slug would link the card to a `graphl.in/<slug>/` 404.
 - This repo previously held a **built SPA** (an older GraphL catalog); it was replaced by this static
   site on request. The old build is recoverable from git history if ever needed.
 - Working agreement (inherited): one reviewed slice at a time; explain before writing.

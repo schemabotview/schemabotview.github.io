@@ -19,7 +19,7 @@ CNAME            graphl.in   (the custom domain — do not delete)
 .nojekyll        serve files as-is (no Jekyll)
 index.html       hero + catalog mount
 styles.css       dark theme (matches the concept apps)
-app.js           fetch concepts.json + courses.json → render
+app.js           fetch concepts.json → render (one card per concept; no courses.json)
 concepts.json    [ { "slug": "apache-spark", "name": "Apache Spark" }, … ]
 ```
 

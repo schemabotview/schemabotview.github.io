@@ -1,6 +1,1 @@
-# Capture tooling artifacts — dev-only, never served by the branch-deploy Pages site.
-capture/node_modules/
-capture/.tmp/
-capture/segments/
-capture/out/
 .DS_Store
