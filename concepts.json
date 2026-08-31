@@ -1,5 +1,6 @@
 [
   { "slug": "aws", "name": "AWS" },
   { "slug": "apache-spark", "name": "Apache Spark" },
-  { "slug": "python", "name": "Python" }
+  { "slug": "python", "name": "Python" },
+  { "slug": "databricks-data-engineer", "name": "Databricks Data Engineer" }
 ]
