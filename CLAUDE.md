@@ -52,9 +52,10 @@ publish titles were split into each repo's `scripts/titles.json`.
 
 ## Notes
 
-- **Currently listed:** `aws`, `apache-spark`, `python`, `databricks-data-engineer`, `sql` — the
-  deployed apps. `linux` is still intentionally **omitted**: it is a docs-only stub in the workspace,
-  and listing an undeployed slug would link the card to a `graphl.in/<slug>/` 404.
+- **Currently listed:** `aws`, `apache-spark`, `python`, `databricks-data-engineer`, `sql`, `linux` —
+  every deployed app. `linux` joined on 2026-09-01: the `schemabotview/linux` repo's old
+  graphl-studio app was replaced by the workspace concept app (8 courses, 80 sections), Pages was
+  switched to the workflow build source, and `graphl.in/linux/` went live before the card was added.
 - This repo previously held a **built SPA** (an older GraphL catalog); it was replaced by this static
   site on request. The old build is recoverable from git history if ever needed.
 - Working agreement (inherited): one reviewed slice at a time; explain before writing.

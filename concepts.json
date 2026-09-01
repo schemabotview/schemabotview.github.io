@@ -3,5 +3,6 @@
   { "slug": "apache-spark", "name": "Apache Spark" },
   { "slug": "python", "name": "Python" },
   { "slug": "databricks-data-engineer", "name": "Databricks Data Engineer" },
-  { "slug": "sql", "name": "SQL" }
+  { "slug": "sql", "name": "SQL" },
+  { "slug": "linux", "name": "Linux" }
 ]
