@@ -52,9 +52,9 @@ publish titles were split into each repo's `scripts/titles.json`.
 
 ## Notes
 
-- **Currently listed:** `aws`, `apache-spark`, `python` — the deployed apps. `linux` and `sql` are
-  intentionally **omitted** until scaffolded + deployed (docs-only stubs in the workspace); listing an
-  undeployed slug would link the card to a `graphl.in/<slug>/` 404.
+- **Currently listed:** `aws`, `apache-spark`, `python`, `databricks-data-engineer`, `sql` — the
+  deployed apps. `linux` is still intentionally **omitted**: it is a docs-only stub in the workspace,
+  and listing an undeployed slug would link the card to a `graphl.in/<slug>/` 404.
 - This repo previously held a **built SPA** (an older GraphL catalog); it was replaced by this static
   site on request. The old build is recoverable from git history if ever needed.
 - Working agreement (inherited): one reviewed slice at a time; explain before writing.
