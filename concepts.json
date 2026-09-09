@@ -6,5 +6,5 @@
   { "slug": "sql", "name": "SQL" },
   { "slug": "linux", "name": "Linux" },
   { "slug": "data-warehousing", "name": "Data Warehousing" },
-  { "slug": "code-lab", "name": "Code Lab" }
+  { "slug": "python-lab", "name": "Python Lab" }
 ]

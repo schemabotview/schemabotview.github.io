@@ -53,15 +53,18 @@ publish titles were split into each repo's `scripts/titles.json`.
 ## Notes
 
 - **Currently listed:** `aws`, `apache-spark`, `python`, `databricks-data-engineer`, `sql`, `linux`,
-  `data-warehousing`, `code-lab` — every deployed app. `linux` joined on 2026-09-01: the
+  `data-warehousing`, `python-lab` — every deployed app. `linux` joined on 2026-09-01: the
   `schemabotview/linux` repo's old graphl-studio app was replaced by the workspace concept app (8
   courses, 80 sections), Pages was switched to the workflow build source, and `graphl.in/linux/` went
   live before the card was added.
-- **`code-lab` is not a concept app** (added 2026-09-09). It is an interactive Python exercise app —
-  no scenes, no narration, no course/section content — so it does not follow the per-repo anatomy in
-  `../CLAUDE.md`. It earns a catalog card because it is a deployed site under the apex domain, not
-  because it shares the concept-app contract. Repo: `schemabotview/code-lab`; it runs CPython in the
-  browser via Pyodide and routes on `#/` like the concept apps do.
+- **`python-lab` is a lab, not a concept app** (added 2026-09-09). Labs are the hands-on
+  counterpart to a concept app of the same name — the family `aws-lab` started: `<concept>-lab`.
+  A lab has no scenes, narration or course/section content, so it does not follow the per-repo
+  anatomy in `../CLAUDE.md`. Repo: `schemabotview/python-lab`; it runs CPython in the browser via
+  Pyodide and routes on `#/` like the concept apps do.
+- **Courses and labs are meant to be separate tabs** in this index. Until that lands, `python-lab`
+  is listed in `concepts.json` alongside the courses so the site stays reachable — it is
+  miscategorised there, not intentionally a course.
 - This repo previously held a **built SPA** (an older GraphL catalog); it was replaced by this static
   site on request. The old build is recoverable from git history if ever needed.
 - Working agreement (inherited): one reviewed slice at a time; explain before writing.
