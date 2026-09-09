@@ -52,10 +52,16 @@ publish titles were split into each repo's `scripts/titles.json`.
 
 ## Notes
 
-- **Currently listed:** `aws`, `apache-spark`, `python`, `databricks-data-engineer`, `sql`, `linux` —
-  every deployed app. `linux` joined on 2026-09-01: the `schemabotview/linux` repo's old
-  graphl-studio app was replaced by the workspace concept app (8 courses, 80 sections), Pages was
-  switched to the workflow build source, and `graphl.in/linux/` went live before the card was added.
+- **Currently listed:** `aws`, `apache-spark`, `python`, `databricks-data-engineer`, `sql`, `linux`,
+  `data-warehousing`, `code-lab` — every deployed app. `linux` joined on 2026-09-01: the
+  `schemabotview/linux` repo's old graphl-studio app was replaced by the workspace concept app (8
+  courses, 80 sections), Pages was switched to the workflow build source, and `graphl.in/linux/` went
+  live before the card was added.
+- **`code-lab` is not a concept app** (added 2026-09-09). It is an interactive Python exercise app —
+  no scenes, no narration, no course/section content — so it does not follow the per-repo anatomy in
+  `../CLAUDE.md`. It earns a catalog card because it is a deployed site under the apex domain, not
+  because it shares the concept-app contract. Repo: `schemabotview/code-lab`; it runs CPython in the
+  browser via Pyodide and routes on `#/` like the concept apps do.
 - This repo previously held a **built SPA** (an older GraphL catalog); it was replaced by this static
   site on request. The old build is recoverable from git history if ever needed.
 - Working agreement (inherited): one reviewed slice at a time; explain before writing.
