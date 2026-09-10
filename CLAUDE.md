@@ -8,21 +8,30 @@ no framework, no build.
 
 ## What it does
 
-`app.js` (vanilla ES module) on load fetches `concepts.json` — the concepts to show
-(`[{ slug, name }]`) — and renders a gallery of links, one card per concept, pointing at that
-concept's own site (`/<slug>/`). The index does **not** fetch or list courses/sections: each concept
-site owns its own course navigation. Everything is **same-origin under `graphl.in`** (the index and
-every concept site share the apex domain).
+`app.js` (vanilla ES module) renders **two sections** into one panel, selected by a tablist:
+
+- **Courses** → `concepts.json` — the concept apps (narrated diagram courses).
+- **Labs** → `labs.json` — the hands-on counterparts. A lab is `<concept>-lab` and pairs with the
+  concept app of the same name (`python-lab` ↔ `python`; `aws-lab` ↔ `aws`).
+
+Both files are flat `[{ slug, name }]`. Each card links at that site's own app (`/<slug>/`). The
+index does **not** fetch or list courses/sections: each site owns its own navigation. Everything is
+**same-origin under `graphl.in`**.
+
+The active section is in the hash (`#courses` / `#labs`) — linkable, survives reload, unknown hash
+falls back to Courses. Successful lists are cached in memory; **failures are not**, so a transient
+error retries when the tab is next opened rather than sticking until a reload.
 
 ## Files (all served as-is)
 
 ```
 CNAME         graphl.in   ← the custom domain. DO NOT DELETE (removing it breaks the domain).
 .nojekyll     disable Jekyll (serve files verbatim)
-index.html    hero + <main id="catalog">
-styles.css    dark theme, matches the concept apps
-app.js        fetch concepts.json → render one link card per concept (→ /<slug>/)
-concepts.json the concept list
+index.html    hero + Courses/Labs tablist + <ol id="catalog"> panel
+styles.css    dark theme, matches the concept apps (tabs = a quiet underline rail)
+app.js        fetch the active section's file → render one link card per entry (→ /<slug>/)
+concepts.json Courses — the concept list
+labs.json     Labs — the lab list
 ```
 
 ## Deploy
@@ -40,15 +49,17 @@ app's `window.__scene` surface from its bundled `src/render-engine`. There is no
 here — a former `capture/` folder (a different `window.__capture` recorder) was removed; its curated
 publish titles were split into each repo's `scripts/titles.json`.
 
-## Add a concept to the catalog
+## Add an entry to the catalog
 
-1. The concept app must be **deployed** (serving `graphl.in/<slug>/`). Vite/TS concept apps deploy
+Courses go in `concepts.json`, labs in `labs.json`. Otherwise the steps are the same.
+
+1. The app must be **deployed** (serving `graphl.in/<slug>/`). Vite/TS concept apps deploy
    via a GitHub Actions Pages workflow in their own repo (build → deploy `dist/`); see
    `aws-content`'s `.github/workflows/deploy.yml` for the reference. The apex custom domain is
    inherited from this repo's `CNAME`, so a project repo published under the org serves at
    `graphl.in/<repo>/` — the repo name is the slug.
-2. Add `{ "slug": "<slug>", "name": "<Name>" }` to `concepts.json`; push. Its card appears in the
-   gallery, linking to `graphl.in/<slug>/`.
+2. Add `{ "slug": "<slug>", "name": "<Name>" }` to the right file; push. Its card appears in that
+   tab, linking to `graphl.in/<slug>/`.
 
 ## Notes
 
@@ -62,9 +73,8 @@ publish titles were split into each repo's `scripts/titles.json`.
   A lab has no scenes, narration or course/section content, so it does not follow the per-repo
   anatomy in `../CLAUDE.md`. Repo: `schemabotview/python-lab`; it runs CPython in the browser via
   Pyodide and routes on `#/` like the concept apps do.
-- **Courses and labs are meant to be separate tabs** in this index. Until that lands, `python-lab`
-  is listed in `concepts.json` alongside the courses so the site stays reachable — it is
-  miscategorised there, not intentionally a course.
+- **`aws-lab` is not listed yet** — it exists as a repo but has no Pages deployment, and the rule
+  above (deploy first) applies to labs too. It joins `labs.json` once `graphl.in/aws-lab/` serves.
 - This repo previously held a **built SPA** (an older GraphL catalog); it was replaced by this static
   site on request. The old build is recoverable from git history if ever needed.
 - Working agreement (inherited): one reviewed slice at a time; explain before writing.

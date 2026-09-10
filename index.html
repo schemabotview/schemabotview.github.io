@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GraphL — visual courses</title>
+    <title>GraphL — visual courses and hands-on labs</title>
     <meta
       name="description"
-      content="GraphL — technical concepts taught as diagrams that assemble themselves, beat by beat, in sync with the narration."
+      content="GraphL — technical concepts taught as diagrams that assemble themselves, beat by beat, in sync with the narration, plus hands-on labs you work through yourself."
     />
     <link rel="icon" type="image/svg+xml" href="icon.svg" />
     <link rel="stylesheet" href="styles.css" />
@@ -15,9 +15,36 @@
     <main class="idx">
       <header class="idx__head">
         <span class="idx__brand">GraphL</span>
-        <h1 class="idx__subject">Visual courses</h1>
+        <h1 class="idx__subject" id="subject">Visual courses</h1>
       </header>
-      <ol id="catalog" class="idx__grid">
+      <nav class="idx__tabs" role="tablist" aria-label="Catalog sections">
+        <button
+          type="button"
+          class="idx__tab"
+          role="tab"
+          id="tab-courses"
+          data-tab="courses"
+          data-subject="Visual courses"
+          aria-controls="catalog"
+          aria-selected="true"
+        >
+          Courses
+        </button>
+        <button
+          type="button"
+          class="idx__tab"
+          role="tab"
+          id="tab-labs"
+          data-tab="labs"
+          data-subject="Hands-on labs"
+          aria-controls="catalog"
+          aria-selected="false"
+          tabindex="-1"
+        >
+          Labs
+        </button>
+      </nav>
+      <ol id="catalog" class="idx__grid" role="tabpanel" aria-labelledby="tab-courses" tabindex="0">
         <li class="idx__empty">Loading catalog…</li>
       </ol>
     </main>

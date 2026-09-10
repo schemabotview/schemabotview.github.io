@@ -5,6 +5,5 @@
   { "slug": "databricks-data-engineer", "name": "Databricks Data Engineer" },
   { "slug": "sql", "name": "SQL" },
   { "slug": "linux", "name": "Linux" },
-  { "slug": "data-warehousing", "name": "Data Warehousing" },
-  { "slug": "python-lab", "name": "Python Lab" }
+  { "slug": "data-warehousing", "name": "Data Warehousing" }
 ]
