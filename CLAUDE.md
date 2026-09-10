@@ -8,7 +8,8 @@ no framework, no build.
 
 ## What it does
 
-`app.js` (vanilla ES module) renders **two sections** into one panel, selected by a tablist:
+`app.js` (vanilla ES module) renders **two sections** into one panel, selected from the site
+header's nav:
 
 - **Courses** → `concepts.json` — the concept apps (narrated diagram courses).
 - **Labs** → `labs.json` — the hands-on counterparts. A lab is `<concept>-lab` and pairs with the
@@ -18,17 +19,22 @@ Both files are flat `[{ slug, name }]`. Each card links at that site's own app (
 index does **not** fetch or list courses/sections: each site owns its own navigation. Everything is
 **same-origin under `graphl.in`**.
 
-The active section is in the hash (`#courses` / `#labs`) — linkable, survives reload, unknown hash
-falls back to Courses. Successful lists are cached in memory; **failures are not**, so a transient
-error retries when the tab is next opened rather than sticking until a reload.
+Layout is conventional site chrome: a header with the logo + wordmark on the left and the section
+nav on the right, then the section title and the card list. The nav items are **plain anchors** to
+`#courses` / `#labs`, so activation, keyboard, middle-click and copy-link are the browser's job —
+`app.js` only sets `aria-current="page"` and renders the matching list.
+
+The active section is in the hash — linkable, survives reload, unknown hash falls back to Courses;
+`document.title` follows it. Successful lists are cached in memory; **failures are not**, so a
+transient error retries when the section is next opened rather than sticking until a reload.
 
 ## Files (all served as-is)
 
 ```
 CNAME         graphl.in   ← the custom domain. DO NOT DELETE (removing it breaks the domain).
 .nojekyll     disable Jekyll (serve files verbatim)
-index.html    hero + Courses/Labs tablist + <ol id="catalog"> panel
-styles.css    dark theme, matches the concept apps (tabs = a quiet underline rail)
+index.html    site header (logo + wordmark + Courses/Labs nav) + <ol id="catalog"> panel
+styles.css    dark theme, matches the concept apps (.site* header, .idx* page + cards)
 app.js        fetch the active section's file → render one link card per entry (→ /<slug>/)
 concepts.json Courses — the concept list
 labs.json     Labs — the lab list

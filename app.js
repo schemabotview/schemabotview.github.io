@@ -4,11 +4,13 @@
 // graphl.in/<slug>/ — the index only points at them, it never lists their courses or exercises.
 //
 // Adding an entry = adding a { slug, name } to the right file, once that site is deployed.
-// The active section lives in the hash (#courses / #labs) so a tab is linkable and survives reload.
+// The active section lives in the hash (#courses / #labs) so it is linkable and survives reload.
+// The header's section links are plain anchors to those hashes — the browser handles activation
+// and keyboard; this module only marks which one is current and renders the matching list.
 
 const CATALOG = document.getElementById('catalog')
 const SUBJECT = document.getElementById('subject')
-const TABS = [...document.querySelectorAll('[role="tab"]')]
+const LINKS = [...document.querySelectorAll('[data-section]')]
 
 const SECTIONS = {
   courses: { file: 'concepts.json', empty: 'No courses published yet.' },
@@ -69,13 +71,17 @@ async function render() {
   const section = sectionFromHash()
   const token = ++renderToken
 
-  for (const tab of TABS) {
-    const selected = tab.dataset.tab === section
-    tab.setAttribute('aria-selected', String(selected))
-    tab.tabIndex = selected ? 0 : -1 // roving tabindex: one stop for the whole tablist
-    if (selected && tab.dataset.subject) SUBJECT.textContent = tab.dataset.subject
+  for (const link of LINKS) {
+    const current = link.dataset.section === section
+    // aria-current is the right signal for "this nav link is the page you are on".
+    if (current) {
+      link.setAttribute('aria-current', 'page')
+      if (link.dataset.subject) SUBJECT.textContent = link.dataset.subject
+    } else {
+      link.removeAttribute('aria-current')
+    }
   }
-  CATALOG.setAttribute('aria-labelledby', `tab-${section}`)
+  document.title = `GraphL — ${SUBJECT.textContent.toLowerCase()}`
 
   if (!loaded.has(section)) CATALOG.replaceChildren(el('li', 'idx__empty', 'Loading…'))
   const entries = await listFor(section)
@@ -88,23 +94,6 @@ async function render() {
   } else {
     CATALOG.replaceChildren(...entries.map(entryCard))
   }
-}
-
-function show(section) {
-  if (sectionFromHash() === section) return
-  location.hash = section // hashchange drives the re-render
-}
-
-for (const [index, tab] of TABS.entries()) {
-  tab.addEventListener('click', () => show(tab.dataset.tab))
-  tab.addEventListener('keydown', (event) => {
-    const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0
-    if (!step) return
-    event.preventDefault()
-    const next = TABS[(index + step + TABS.length) % TABS.length]
-    next.focus()
-    show(next.dataset.tab)
-  })
 }
 
 window.addEventListener('hashchange', render)

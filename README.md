@@ -16,16 +16,19 @@ Both are flat `[{ slug, name }]` files, and every card links into that site's ow
 `graphl.in/<slug>/`. The index never fetches or lists courses/sections — each site owns its own
 navigation. All same-origin under `graphl.in`.
 
-The active section lives in the hash (`#courses` / `#labs`), so a tab is linkable and survives a
-reload. An unknown hash falls back to Courses. A broken data file shows "Catalog unavailable." on
-that tab only, and is retried the next time the tab is opened.
+The page is ordinary site chrome — a header with the logo and wordmark on the left, the section
+nav on the right — and the nav items are plain `#courses` / `#labs` anchors.
+
+The active section lives in the hash, so it is linkable and survives a reload. An unknown hash
+falls back to Courses. A broken data file shows "Catalog unavailable." on that section only, and is
+retried the next time it is opened.
 
 ## Files
 
 ```
 CNAME            graphl.in   (the custom domain — do not delete)
 .nojekyll        serve files as-is (no Jekyll)
-index.html       hero + Courses/Labs tablist + catalog mount
+index.html       site header (logo + wordmark + Courses/Labs nav) + catalog mount
 styles.css       dark theme (matches the concept apps)
 app.js           fetch the active section's file → render one card per entry
 concepts.json    Courses: [ { "slug": "apache-spark", "name": "Apache Spark" }, … ]
