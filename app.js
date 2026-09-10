@@ -10,8 +10,6 @@
 
 const CATALOG = document.getElementById('catalog')
 const SUBJECT = document.getElementById('subject') // sr-only <h1>
-const BLURB = document.getElementById('blurb')
-const COUNT = document.getElementById('count')
 const LINKS = [...document.querySelectorAll('[data-section]')]
 
 const SECTIONS = {
@@ -79,13 +77,10 @@ async function render() {
     if (link === active) link.setAttribute('aria-current', 'page')
     else link.removeAttribute('aria-current')
   }
-  // Section copy lives on the nav links themselves, so the words stay in the markup.
   if (active) {
     SUBJECT.textContent = active.dataset.title
-    BLURB.textContent = active.dataset.blurb
     document.title = `GraphL — ${active.dataset.title.toLowerCase()}`
   }
-  COUNT.textContent = '' // cleared until the list resolves
 
   if (!loaded.has(section)) CATALOG.replaceChildren(el('li', 'idx__empty', 'Loading…'))
   const entries = await listFor(section)
@@ -97,8 +92,6 @@ async function render() {
     CATALOG.replaceChildren(el('li', 'idx__empty', SECTIONS[section].empty))
   } else {
     CATALOG.replaceChildren(...entries.map(entryCard))
-    const noun = active?.dataset.noun ?? 'entry'
-    COUNT.textContent = `${entries.length} ${noun}${entries.length === 1 ? '' : 's'}`
   }
 }
 

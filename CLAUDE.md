@@ -20,11 +20,10 @@ index does **not** fetch or list courses/sections: each site owns its own naviga
 **same-origin under `graphl.in`**.
 
 Layout is conventional site chrome: a header with the logo + wordmark on the left and the section
-nav on the right, then a one-line description of the section, then the card list. There is no big
-visible section title — the nav's current item already says which section you are in, so the `<h1>`
-is `sr-only` (kept for structure) and that space goes to the thing the nav can't convey: what a
-course is versus what a lab is. Each nav link carries its own `data-title` / `data-noun` /
-`data-blurb`, so the copy lives in the markup; `app.js` appends the list size ("7 courses"). The nav items are **plain anchors** to
+nav on the right, then the card list — nothing between them. **The page body carries no visible
+heading, description or count by design.** The nav's current item is the visible "you are here" and
+the cards are numbered, so anything in that slot restates what is already on screen; the `<h1>` is
+`sr-only`, kept for structure. `data-title` on each nav link supplies it and `document.title`. The nav items are **plain anchors** to
 `#courses` / `#labs`, so activation, keyboard, middle-click and copy-link are the browser's job —
 `app.js` only sets `aria-current="page"` and renders the matching list.
 

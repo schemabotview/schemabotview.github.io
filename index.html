@@ -27,8 +27,6 @@
             href="#courses"
             data-section="courses"
             data-title="Courses"
-            data-noun="course"
-            data-blurb="Each concept taught as diagrams that assemble themselves, beat by beat, in sync with the narration."
             >Courses</a
           >
           <a
@@ -36,8 +34,6 @@
             href="#labs"
             data-section="labs"
             data-title="Labs"
-            data-noun="lab"
-            data-blurb="The hands-on half — work through it yourself, step by step, alongside the matching course."
             >Labs</a
           >
         </nav>
@@ -45,17 +41,9 @@
     </header>
 
     <main class="idx">
-      <!-- The nav already shows which section you are in, so the heading is for structure and
-           screen readers only. The visible line explains what this section IS — the one thing a
-           first-time visitor can't infer from the nav. -->
+      <!-- The nav's current item is the visible "you are here", and the cards are numbered, so the
+           page needs no heading or count of its own. The <h1> is kept for structure only. -->
       <h1 class="sr-only" id="subject">Courses</h1>
-      <p class="idx__blurb">
-        <span id="blurb"
-          >Each concept taught as diagrams that assemble themselves, beat by beat, in sync with the
-          narration.</span
-        >
-        <span class="idx__count" id="count"></span>
-      </p>
       <ol id="catalog" class="idx__grid">
         <li class="idx__empty">Loading catalog…</li>
       </ol>

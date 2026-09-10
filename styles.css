@@ -139,30 +139,6 @@ body {
   border: 0;
 }
 
-/* One line saying what this section is — the thing the nav can't tell you — with the size of the
-   list at the end of it. */
-.idx__blurb {
-  margin: 0 0 20px;
-  max-width: 62ch;
-  font-size: 15px;
-  line-height: 1.55;
-  color: var(--idx-muted);
-}
-.idx__count {
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-  color: var(--idx-accent);
-}
-.idx__count:not(:empty)::before {
-  content: ' · ';
-  color: var(--idx-muted);
-}
-.idx__empty {
-  color: var(--idx-muted);
-  font-size: 16px;
-  list-style: none;
-}
-
 /* Concepts grid — a single column of cards (mirrors the concept index's course accordions, but each
    card is a plain link into that concept's own site rather than an expandable accordion). */
 .idx__grid {
@@ -232,8 +208,5 @@ body {
   }
   .idx {
     padding: 24px 20px 48px;
-  }
-  .idx__blurb {
-    font-size: 14px;
   }
 }
