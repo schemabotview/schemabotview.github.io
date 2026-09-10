@@ -17,7 +17,9 @@ Both are flat `[{ slug, name }]` files, and every card links into that site's ow
 navigation. All same-origin under `graphl.in`.
 
 The page is ordinary site chrome — a header with the logo and wordmark on the left, the section
-nav on the right — and the nav items are plain `#courses` / `#labs` anchors.
+nav on the right — and the nav items are plain `#courses` / `#labs` anchors. Below it, a single
+line says what the section is and how many entries it has; the `<h1>` is visually hidden, because
+the highlighted nav item is already the visible "you are here".
 
 The active section lives in the hash, so it is linkable and survives a reload. An unknown hash
 falls back to Courses. A broken data file shows "Catalog unavailable." on that section only, and is

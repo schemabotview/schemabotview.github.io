@@ -124,12 +124,38 @@ body {
   margin: 0 auto;
   padding: 40px 32px 64px;
 }
-.idx__subject {
-  margin: 0 0 28px;
-  font-size: 36px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
+/* Available to assistive tech, absent from the layout — the visible heading duty is done by the
+   nav's current item, so a big repeated title would only cost space. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* One line saying what this section is — the thing the nav can't tell you — with the size of the
+   list at the end of it. */
+.idx__blurb {
+  margin: 0 0 20px;
+  max-width: 62ch;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--idx-muted);
+}
+.idx__count {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--idx-accent);
+}
+.idx__count:not(:empty)::before {
+  content: ' · ';
+  color: var(--idx-muted);
 }
 .idx__empty {
   color: var(--idx-muted);
@@ -205,9 +231,9 @@ body {
     font-size: 14px;
   }
   .idx {
-    padding: 28px 20px 48px;
+    padding: 24px 20px 48px;
   }
-  .idx__subject {
-    font-size: 30px;
+  .idx__blurb {
+    font-size: 14px;
   }
 }
