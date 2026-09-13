@@ -187,6 +187,133 @@ body {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+
+/* ── Account ──────────────────────────────────────────────────────────────────────────────────
+   Signed out this is one button; signed in it is an avatar that opens a menu. Both live in
+   .site__actions beside the theme toggle, and both are absent until auth.js has an answer — the
+   catalog is a public directory and renders fully without any of this. */
+.site__signin {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bg);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 9px;
+  padding: 8px 14px;
+  min-height: 36px;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.site__signin:hover {
+  opacity: 0.88;
+}
+.site__signin:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.site__signin:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.account {
+  position: relative;
+  display: flex;
+}
+.account__avatar {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  background: var(--accent-soft);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.account__avatar:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.account__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.account__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+.account__head {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.account__name {
+  font-size: 15px;
+  font-weight: 700;
+}
+.account__email {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.account__plan {
+  margin-top: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.account__plan--premium {
+  color: var(--accent);
+}
+.account__item {
+  text-align: left;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  padding: 12px 16px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.account__item:hover {
+  background: var(--hover);
+}
+.account__item:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.account__item--cta {
+  color: var(--accent);
+}
+.account__item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
 .site__link {
   flex: none;
   white-space: nowrap;
@@ -359,9 +486,20 @@ body {
     padding: 8px 10px;
     font-size: 14px;
   }
-  .site__icon {
+  .site__icon,
+  .account__avatar {
     width: 40px;
     height: 40px;
+  }
+  /* Anchoring a 240px dropdown to a 40px circle near the screen edge is a poor touch target and
+     usually clips. On a phone the menu spans the viewport instead, under the brand row. */
+  .account {
+    position: static;
+  }
+  .account__menu {
+    left: 12px;
+    right: 12px;
+    min-width: 0;
   }
   .idx {
     padding: 20px 20px 48px;

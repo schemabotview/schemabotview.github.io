@@ -45,6 +45,8 @@ CNAME            graphl.in   (the custom domain — do not delete)
 index.html       site header (brand + nav + theme button) + catalog mount
 styles.css       light + dark theme tokens (matches the concept apps)
 theme.js         three-state theme control (system / light / dark)
+auth.js          Google sign-in + account menu + subscription state
+firebase-config.js  public Firebase web config (shared project) and pinned SDK URL
 app.js           fetch the active section's file → render one card per entry
 catalog.json     kinds (the nav) + apps (the cards)
 
@@ -52,6 +54,16 @@ package.json      no dependencies; scripts: `dev`, `check`
 scripts/serve.mjs zero-dep local server that mimics GitHub Pages
 scripts/check-catalog.mjs   validates catalog.json (`--links` checks graphl.in)
 ```
+
+## Sign in
+
+Google sign-in via Firebase, on the owner's existing `schemabot-ae922` project — the same account
+and the same subscription as the other products, so one membership covers everything. Billing is
+the `firestore-stripe-payments` extension: the client asks for a Checkout session and reads back
+what Stripe wrote, and can never grant itself a subscription.
+
+All of it is additive — the catalog is public and renders completely signed out, offline, or with
+the Firebase CDN blocked.
 
 ## Mobile
 

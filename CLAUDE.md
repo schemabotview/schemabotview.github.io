@@ -42,6 +42,42 @@ strict counterpart — see *Add an entry*.
 Each card links at that site's own app (`/<slug>/`). The index does **not** fetch or list
 courses/sections: each site owns its own navigation.
 
+### Sign-in and the subscription
+
+**Reused, not built.** Auth and billing already run on the owner's existing Firebase project
+`schemabot-ae922` (see `schematic1/src/stores/useAuthStore.ts`, plus `schematic-reader`,
+`schematic`, `NodeEditor` — all private). This repo ports only the *client*, from React + zustand +
+the npm SDK to vanilla ESM off Google's CDN, so the catalog stays buildless.
+
+```
+customers/{uid}/subscriptions       written by the Stripe webhook, READ-ONLY to the client
+                                    entitlement = any doc with status active | trialing
+customers/{uid}/checkout_sessions   client writes { price, success_url, cancel_url };
+                                    the extension answers with a `url` to redirect to
+```
+
+Backend is the **`firestore-stripe-payments` extension**. The client can never grant itself a
+subscription — only ask Stripe for one and read back what Stripe decided. **Do not cache
+entitlement anywhere the client can write.**
+
+- **One price, all products** (decided 2026-09-13). The check is deliberately *not* product-scoped:
+  a subscriber to any of the owner's products is premium here too.
+- **The subscription read fails closed.** Denied or offline ⇒ "Free". A false Premium badge is a
+  lie; a spurious upgrade button is merely annoying.
+- **All of it is additive.** The catalog is a public directory and renders completely for a
+  signed-out reader, an offline reader, or one whose network blocks `gstatic.com` — verified.
+
+Two things live outside this repo and cannot be fixed from inside it:
+
+1. **`graphl.in` must be listed in Firebase → Authentication → Authorized domains**, or sign-in
+   fails. `localhost` is authorised by default, so local and production can differ here.
+2. **Never add `firestore.rules` to this repo.** Rules are per-project and deploying them replaces
+   the *entire* ruleset — a GraphL-only file would delete the customers/products rules the owner's
+   other apps depend on.
+
+`signInWithPopup`, not `signInWithRedirect`: redirect breaks under third-party-cookie blocking when
+`authDomain` is not the site's own domain.
+
 ### Mobile
 
 The header is **two rows below 560px**: brand and the icon buttons stay together on top, the
@@ -114,6 +150,8 @@ index.html    site header (brand + empty nav + theme button) + <ol id="catalog">
               …plus the blocking inline theme boot in <head>
 styles.css    light + dark tokens, matches the concept apps (.site* header, .idx* page + cards)
 theme.js      the three-state theme control (system / light / dark)
+auth.js       Google sign-in, the account menu, and the shared subscription
+firebase-config.js  the EXISTING project's public web config + the pinned SDK URL
 app.js        fetch the active section's file → render one link card per entry (→ /<slug>/)
 catalog.json  kinds (the nav) + apps (the cards) — the whole catalog, one file
 ```

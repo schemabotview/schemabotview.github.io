@@ -38,6 +38,9 @@
           <!-- Cycles system → light → dark. Rendered empty; theme.js fills the glyph and the
                label so the markup never disagrees with the active theme. -->
           <button class="site__icon" id="theme" type="button"></button>
+          <!-- Sign-in button, or the account menu once signed in. Empty until auth.js decides:
+               the catalog is a public directory and must render fully without it. -->
+          <div id="account"></div>
         </div>
       </div>
     </header>
@@ -52,5 +55,6 @@
     </main>
     <script type="module" src="theme.js"></script>
     <script type="module" src="app.js"></script>
+    <script type="module" src="auth.js"></script>
   </body>
 </html>
