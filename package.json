@@ -1,0 +1,11 @@
+{
+  "name": "schemabotview.github.io",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "The GraphL catalog index (graphl.in). A pure static site — no framework, no build. The only script is a zero-dependency dev server that mimics GitHub Pages so local matches production.",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs"
+  }
+}

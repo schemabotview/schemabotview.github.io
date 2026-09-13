@@ -43,6 +43,29 @@ concepts.json Courses — the concept list
 labs.json     Labs — the lab list
 ```
 
+Not part of the published site, only the local workflow:
+
+```
+package.json      no dependencies — `npm install` is a no-op. One script: `dev`.
+scripts/serve.mjs zero-dep node:http server that mimics GitHub Pages (see below)
+```
+
+## Run locally
+
+```
+npm run dev            # http://localhost:8000
+PORT=3000 npm run dev  # another port
+```
+
+There is still **no build** — `scripts/serve.mjs` only serves this folder the way Pages serves it,
+so "works locally" means "works on graphl.in". It reproduces: `/` → `index.html`, `/dir` → 301
+`/dir/`, `/about` → `about.html`, `404.html` when present, real MIME types, no directory listings,
+and **case-sensitive paths** — macOS would happily serve `Icon.svg` for `icon.svg` and Pages
+(Linux) would 404, so a casing mismatch 404s here too and logs why.
+
+Sister apps are *not* served: a catalog card points at `/<slug>/`, which only exists on graphl.in
+or if you run that concept app yourself. Locally those links 404 — expected.
+
 ## Deploy
 
 - **Deploy-from-branch** (GitHub Pages, legacy build source = `main`). Push to `main` → it publishes.

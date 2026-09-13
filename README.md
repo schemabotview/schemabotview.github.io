@@ -35,7 +35,22 @@ styles.css       dark theme (matches the concept apps)
 app.js           fetch the active section's file → render one card per entry
 concepts.json    Courses: [ { "slug": "apache-spark", "name": "Apache Spark" }, … ]
 labs.json        Labs:    [ { "slug": "python-lab", "name": "Python Lab" }, … ]
+
+package.json      no dependencies; one script (`dev`)
+scripts/serve.mjs zero-dep local server that mimics GitHub Pages
 ```
+
+## Run locally
+
+```sh
+npm run dev            # http://localhost:8000
+PORT=3000 npm run dev  # another port
+```
+
+Still no build step — the server just serves this folder the way Pages does (directory
+`index.html`, `/dir` → `/dir/` redirect, `404.html`, correct MIME types, and case-sensitive paths,
+so a `Icon.svg`/`icon.svg` slip fails locally instead of only in production). Catalog cards point
+at `/<slug>/`, which lives in another repo, so those links 404 locally.
 
 ## Add an entry to the catalog
 
