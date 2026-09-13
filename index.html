@@ -12,31 +12,17 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <!-- Site chrome: brand on the left, section nav on the right. The links are real anchors to
-         #courses / #labs, so activation, keyboard, middle-click and copy-link all come for free —
-         app.js only marks which one is current. -->
+    <!-- Site chrome: brand on the left, section nav on the right. The nav is EMPTY here on purpose
+         — app.js builds it from catalog.json's `kinds`, so adding a section never means editing
+         this file. The links it writes are real anchors to #<kind>, so activation, keyboard,
+         middle-click and copy-link all come for free; app.js only marks which one is current. -->
     <header class="site">
       <div class="site__inner">
         <a class="site__brand" href="#courses">
           <img class="site__logo" src="icon.svg" alt="" width="28" height="28" />
           <span class="site__name">GraphL</span>
         </a>
-        <nav class="site__nav" aria-label="Sections">
-          <a
-            class="site__link"
-            href="#courses"
-            data-section="courses"
-            data-title="Courses"
-            >Courses</a
-          >
-          <a
-            class="site__link"
-            href="#labs"
-            data-section="labs"
-            data-title="Labs"
-            >Labs</a
-          >
-        </nav>
+        <nav class="site__nav" id="nav" aria-label="Sections"></nav>
       </div>
     </header>
 

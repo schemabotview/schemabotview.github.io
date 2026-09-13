@@ -1,33 +1,25 @@
-// The GraphL catalog index. Two sections, each a list of published sites: COURSES (the concept
-// apps — narrated diagram courses) and LABS (their hands-on counterparts, e.g. python-lab pairs
-// with python). Each is a flat [{ slug, name }] file, and every entry links into its own site at
-// graphl.in/<slug>/ — the index only points at them, it never lists their courses or exercises.
+// The GraphL catalog index. One file, catalog.json, describes everything the site lists: the
+// sections in the header nav (`kinds`) and the published sites under them (`apps`). Adding a
+// sister repo is adding one object to `apps` — no change here, no change to index.html.
 //
-// Adding an entry = adding a { slug, name } to the right file, once that site is deployed.
-// The active section lives in the hash (#courses / #labs) so it is linkable and survives reload.
-// The header's section links are plain anchors to those hashes — the browser handles activation
-// and keyboard; this module only marks which one is current and renders the matching list.
+// Every card links into its own site at graphl.in/<slug>/, and the index never fetches or lists
+// what is inside them: each site owns its own navigation. Everything is same-origin under
+// graphl.in, which is what lets a session and a theme choice be shared across all of them.
+//
+// The active section lives in the hash (#courses / #labs / …) so it is linkable and survives a
+// reload. Kind ids ARE the hash, which is why they read plural: #courses and #labs were already
+// public URLs before the catalog became data, and they still resolve.
+//
+// Robustness rule, applied throughout: unknown or missing values DEGRADE, they never break the
+// page. An app naming a kind that no longer exists still gets a tab; an app with no name falls
+// back to its slug; a bad `status` is treated as live. The catalog is hand-edited, so the failure
+// mode for a typo has to be "slightly wrong", never "blank page".
 
 const CATALOG = document.getElementById('catalog')
 const SUBJECT = document.getElementById('subject') // sr-only <h1>
-const LINKS = [...document.querySelectorAll('[data-section]')]
+const NAV = document.getElementById('nav')
 
-const SECTIONS = {
-  courses: { file: 'concepts.json', empty: 'No courses published yet.' },
-  labs: { file: 'labs.json', empty: 'No labs published yet.' },
-}
-const DEFAULT_SECTION = 'courses'
-
-// Successful lists are kept so switching back and forth doesn't refetch or re-flash a loading
-// state. Failures are deliberately NOT cached: a blip on one tab should be retried the next time
-// that tab is opened, not remembered for the life of the page.
-const loaded = new Map()
-
-async function getJSON(url) {
-  const res = await fetch(url, { cache: 'no-cache' })
-  if (!res.ok) throw new Error(`${url} → ${res.status}`)
-  return res.json()
-}
+const SOURCE = 'catalog.json'
 
 function el(tag, className, text) {
   const node = document.createElement(tag)
@@ -36,63 +28,140 @@ function el(tag, className, text) {
   return node
 }
 
+// ---------------------------------------------------------------- data
+
+// The parsed catalog, or null if it could not be loaded. Held rather than refetched so switching
+// sections does not re-flash a loading state; a failure is NOT held, so the next hashchange
+// retries instead of the error sticking until a reload.
+let catalog = null
+
+async function load() {
+  if (catalog) return catalog
+  try {
+    const res = await fetch(SOURCE, { cache: 'no-cache' })
+    if (!res.ok) throw new Error(`${SOURCE} → ${res.status}`)
+    const data = await res.json()
+    catalog = normalise(data)
+    return catalog
+  } catch (err) {
+    console.error(err)
+    return null
+  }
+}
+
+// Turn whatever is in the file into the shape the renderer expects, inventing what is missing.
+// A kind is only *declared* so it can carry a label and an order — an app may reference one that
+// was never declared, and rather than dropping that app on the floor we append a tab for it.
+function normalise(data) {
+  const kinds = (Array.isArray(data?.kinds) ? data.kinds : [])
+    .filter((k) => k && typeof k.id === 'string')
+    .map((k) => ({ id: k.id, label: k.label || title(k.id) }))
+
+  const apps = (Array.isArray(data?.apps) ? data.apps : [])
+    .filter((a) => a && typeof a.slug === 'string')
+    .filter((a) => a.status !== 'hidden')
+    .map((a) => ({
+      slug: a.slug,
+      name: a.name || a.slug,
+      kind: a.kind || kinds[0]?.id || 'other',
+      subject: a.subject || a.name || a.slug,
+      status: a.status === 'soon' ? 'soon' : 'live',
+      access: a.access === 'premium' ? 'premium' : 'free',
+      href: a.href || `${a.slug}/`,
+    }))
+
+  const declared = new Set(kinds.map((k) => k.id))
+  for (const app of apps) {
+    if (declared.has(app.kind)) continue
+    declared.add(app.kind)
+    kinds.push({ id: app.kind, label: title(app.kind) })
+  }
+
+  return { kinds, apps }
+}
+
+const title = (id) => id.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+
+// ---------------------------------------------------------------- render
+
+// The header nav, built from the catalog's kinds. These stay plain anchors to #<id> so that
+// activation, keyboard, middle-click and copy-link are all the browser's job — this module only
+// marks which one is current.
+function renderNav(kinds, current) {
+  NAV.replaceChildren(
+    ...kinds.map((kind) => {
+      const a = el('a', 'site__link', kind.label)
+      a.href = `#${kind.id}`
+      a.dataset.kind = kind.id
+      if (kind.id === current) a.setAttribute('aria-current', 'page')
+      return a
+    }),
+  )
+}
+
 // A row: a numbered card linking into the site's own app (graphl.in/<slug>/). Reuses the concept
 // apps' landing vocabulary (.idx-card*) — number box · title · arrow — so the root catalog and each
 // site's own index read as one system. `i` is the zero-based position → the 01, 02… label.
-function entryCard(entry, i) {
+//
+// A "soon" app is deliberately not a link: it has no deploy yet, and a card that 404s is worse
+// than one that says it is coming.
+function card(app, i) {
   const li = el('li', 'idx-card')
-  const a = el('a', 'idx-card__link')
-  a.href = `${entry.slug}/`
-  a.appendChild(el('span', 'idx-card__num', String(i + 1).padStart(2, '0')))
-  a.appendChild(el('span', 'idx-card__title', entry.name ?? entry.slug))
-  const arrow = el('span', 'idx-card__arrow', '→')
-  arrow.setAttribute('aria-hidden', 'true')
-  a.appendChild(arrow)
-  li.appendChild(a)
+  const soon = app.status === 'soon'
+  const inner = el(soon ? 'span' : 'a', 'idx-card__link')
+  if (!soon) inner.href = app.href
+  if (soon) li.classList.add('idx-card--soon')
+
+  inner.appendChild(el('span', 'idx-card__num', String(i + 1).padStart(2, '0')))
+  inner.appendChild(el('span', 'idx-card__title', app.name))
+
+  if (app.access === 'premium') inner.appendChild(el('span', 'idx-card__tag', 'Premium'))
+
+  if (soon) {
+    inner.appendChild(el('span', 'idx-card__tag idx-card__tag--soon', 'Soon'))
+  } else {
+    const arrow = el('span', 'idx-card__arrow', '→')
+    arrow.setAttribute('aria-hidden', 'true')
+    inner.appendChild(arrow)
+  }
+
+  li.appendChild(inner)
   return li
 }
 
-function sectionFromHash() {
-  const name = location.hash.replace(/^#\/?/, '')
-  return name in SECTIONS ? name : DEFAULT_SECTION
-}
-
-async function listFor(section) {
-  if (loaded.has(section)) return loaded.get(section)
-  const list = await getJSON(SECTIONS[section].file).catch(() => null)
-  if (list !== null) loaded.set(section, list)
-  return list
-}
-
-// Guards against a slow fetch for an abandoned tab overwriting the one now on screen.
+// Guards against a slow fetch for an abandoned section overwriting the one now on screen.
 let renderToken = 0
 
 async function render() {
-  const section = sectionFromHash()
   const token = ++renderToken
+  if (!catalog) CATALOG.replaceChildren(el('li', 'idx__empty', 'Loading…'))
 
-  const active = LINKS.find((link) => link.dataset.section === section)
-  for (const link of LINKS) {
-    // aria-current is the right signal for "this nav link is the page you are on".
-    if (link === active) link.setAttribute('aria-current', 'page')
-    else link.removeAttribute('aria-current')
-  }
-  if (active) {
-    SUBJECT.textContent = active.dataset.title
-    document.title = `GraphL — ${active.dataset.title.toLowerCase()}`
-  }
-
-  if (!loaded.has(section)) CATALOG.replaceChildren(el('li', 'idx__empty', 'Loading…'))
-  const entries = await listFor(section)
+  const data = await load()
   if (token !== renderToken) return
 
-  if (entries === null) {
+  if (!data) {
+    NAV.replaceChildren()
     CATALOG.replaceChildren(el('li', 'idx__empty', 'Catalog unavailable.'))
-  } else if (entries.length === 0) {
-    CATALOG.replaceChildren(el('li', 'idx__empty', SECTIONS[section].empty))
-  } else {
-    CATALOG.replaceChildren(...entries.map(entryCard))
+    return
   }
+
+  const wanted = location.hash.replace(/^#\/?/, '')
+  const kind = data.kinds.find((k) => k.id === wanted) || data.kinds[0]
+  if (!kind) {
+    CATALOG.replaceChildren(el('li', 'idx__empty', 'Nothing published yet.'))
+    return
+  }
+
+  renderNav(data.kinds, kind.id)
+  SUBJECT.textContent = kind.label
+  document.title = `GraphL — ${kind.label.toLowerCase()}`
+
+  const apps = data.apps.filter((a) => a.kind === kind.id)
+  CATALOG.replaceChildren(
+    ...(apps.length
+      ? apps.map(card)
+      : [el('li', 'idx__empty', `No ${kind.label.toLowerCase()} published yet.`)]),
+  )
 }
 
 window.addEventListener('hashchange', render)

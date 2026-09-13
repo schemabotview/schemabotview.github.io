@@ -1,0 +1,20 @@
+{
+  "kinds": [
+    { "id": "courses", "label": "Courses" },
+    { "id": "labs", "label": "Labs" },
+    { "id": "coach", "label": "Coach" }
+  ],
+  "apps": [
+    { "slug": "aws", "kind": "courses", "name": "AWS", "subject": "AWS" },
+    { "slug": "apache-spark", "kind": "courses", "name": "Apache Spark", "subject": "Apache Spark" },
+    { "slug": "python", "kind": "courses", "name": "Python", "subject": "Python" },
+    { "slug": "databricks-data-engineer", "kind": "courses", "name": "Databricks Data Engineer", "subject": "Databricks" },
+    { "slug": "sql", "kind": "courses", "name": "SQL", "subject": "SQL" },
+    { "slug": "linux", "kind": "courses", "name": "Linux", "subject": "Linux" },
+    { "slug": "data-warehousing", "kind": "courses", "name": "Data Warehousing", "subject": "Data Warehousing" },
+
+    { "slug": "python-lab", "kind": "labs", "name": "Python Lab", "subject": "Python" },
+
+    { "slug": "coach", "kind": "coach", "name": "1:1 Coaching", "status": "soon", "access": "premium" }
+  ]
+}

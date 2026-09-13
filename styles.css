@@ -157,8 +157,7 @@ body {
 /* The whole card is one link: number box · concept title · arrow (matches .idx-card__head's row). */
 .idx-card__link {
   width: 100%;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
   gap: 18px;
   padding: 20px 24px;
@@ -180,6 +179,7 @@ body {
   line-height: 1;
 }
 .idx-card__title {
+  flex: 1;
   min-width: 0;
   font-size: 20px;
   font-weight: 700;
@@ -195,6 +195,37 @@ body {
 .idx-card__link:hover .idx-card__arrow {
   color: var(--idx-accent);
   transform: translateX(3px);
+}
+
+/* Small pills after the title: "Premium" (what the catalog entry declares as `access`) and "Soon"
+   (an app with `status: "soon"` — listed, but not deployed yet). The premium pill is a UI hint
+   only; nothing here gates anything, since a GitHub Pages file is world-readable regardless. */
+.idx-card__tag {
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--idx-accent);
+  border: 1px solid var(--idx-accent);
+  border-radius: 999px;
+  padding: 3px 8px;
+  line-height: 1;
+}
+.idx-card__tag--soon {
+  color: var(--idx-muted);
+  border-color: var(--idx-line);
+}
+/* A "soon" card is a <span>, not an <a>: there is nothing to link to yet, and a card that 404s is
+   worse than one that says it is coming. It must therefore not look clickable. */
+.idx-card--soon {
+  opacity: 0.62;
+}
+.idx-card--soon .idx-card__link {
+  cursor: default;
+}
+.idx-card--soon .idx-card__link:hover {
+  background: transparent;
 }
 
 @media (max-width: 560px) {

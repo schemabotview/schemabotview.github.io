@@ -7,14 +7,26 @@ Live at **https://graphl.in**.
 
 ## How it works
 
-A pure static site (no build). `app.js` renders one of two lists into the same panel:
+A pure static site (no build). Everything the page shows comes from **one file, `catalog.json`** —
+both the sections in the header nav and the cards under them:
 
-- **Courses** — `concepts.json`, the narrated diagram courses (the concept apps).
-- **Labs** — `labs.json`, their hands-on counterparts (`python-lab` pairs with `python`).
+```jsonc
+{
+  "kinds": [ { "id": "courses", "label": "Courses" }, { "id": "labs", "label": "Labs" }, … ],
+  "apps":  [ { "slug": "python", "kind": "courses", "name": "Python" }, … ]
+}
+```
 
-Both are flat `[{ slug, name }]` files, and every card links into that site's own app at
-`graphl.in/<slug>/`. The index never fetches or lists courses/sections — each site owns its own
-navigation. All same-origin under `graphl.in`.
+Listing a new site is **adding one object to `apps`**; a whole new *kind* of site adds one to
+`kinds`. Nothing else changes. Optional per app: `subject` (groups `python` with `python-lab`),
+`status` (`soon` shows a non-clickable card, `hidden` omits it), `access` (`premium` shows a pill).
+Missing or unknown values degrade rather than breaking the page — `npm run check` is the strict
+counterpart.
+
+Every card links into that site's own app at `graphl.in/<slug>/`, where the slug is the repo name.
+The index never fetches or lists courses/sections — each site owns its own navigation. All
+same-origin under `graphl.in`, which is what will let a login session and a theme choice be shared
+across every app.
 
 The page is ordinary site chrome — a header with the logo and wordmark on the left, the section
 nav on the right — and the nav items are plain `#courses` / `#labs` anchors. The card list starts
@@ -33,11 +45,11 @@ CNAME            graphl.in   (the custom domain — do not delete)
 index.html       site header (logo + wordmark + Courses/Labs nav) + catalog mount
 styles.css       dark theme (matches the concept apps)
 app.js           fetch the active section's file → render one card per entry
-concepts.json    Courses: [ { "slug": "apache-spark", "name": "Apache Spark" }, … ]
-labs.json        Labs:    [ { "slug": "python-lab", "name": "Python Lab" }, … ]
+catalog.json     kinds (the nav) + apps (the cards)
 
-package.json      no dependencies; one script (`dev`)
+package.json      no dependencies; scripts: `dev`, `check`
 scripts/serve.mjs zero-dep local server that mimics GitHub Pages
+scripts/check-catalog.mjs   validates catalog.json (`--links` checks graphl.in)
 ```
 
 ## Run locally
@@ -65,9 +77,10 @@ to look.
 ## Add an entry to the catalog
 
 1. Deploy the app so it serves at `graphl.in/<slug>/` (Vite/TS apps deploy via a GitHub Actions
-   Pages workflow in their own repo — see `aws-content`).
-2. Add `{ "slug": "<slug>", "name": "<Name>" }` to `concepts.json` (a course) or `labs.json` (a
-   lab), and push.
+   Pages workflow in their own repo — see `aws-content`). To list it before then, add it with
+   `"status": "soon"`.
+2. Add one object to `apps` in `catalog.json`.
+3. `npm run check` (add `-- --links` to verify it really serves on graphl.in), then push.
 
 Its card appears in that tab, linking to `graphl.in/<slug>/`.
 
