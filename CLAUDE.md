@@ -42,6 +42,28 @@ strict counterpart — see *Add an entry*.
 Each card links at that site's own app (`/<slug>/`). The index does **not** fetch or list
 courses/sections: each site owns its own navigation.
 
+### Theme
+
+Three states: **system** (no stored value — the OS decides via `prefers-color-scheme`) plus
+explicit **light** and **dark**, which override the OS in both directions. The header button cycles
+system → light → dark.
+
+- The switch is `data-theme="light" | "dark"` on `<html>`; **system means no attribute at all**.
+- The choice is `localStorage['graphl:theme']`; choosing system **removes** the key.
+- `index.html` carries a tiny **blocking inline script** in `<head>` that applies a stored choice
+  before first paint. It cannot be a module or deferred — the page would flash the wrong ground on
+  every load. Keep it inline and keep it first.
+- Colours are all tokens on `:root`. The dark palette is written **twice** on purpose (once under
+  `prefers-color-scheme`, once under `[data-theme='dark']`): plain CSS cannot share one block
+  between a media query and an attribute selector, and `light-dark()` renders an unreadable page on
+  a browser that lacks it.
+- `theme.js` adds `.theme-swap` for the frame the change lands in, which kills transitions so the
+  whole page changes at once instead of the ground flipping while hover transitions cross-fade.
+
+**The key and the attribute are platform-wide contracts, not private to this page.** Every app is
+same-origin under `graphl.in`, so a concept app that reads the same key and honours the same
+attribute inherits the reader's choice with nothing passed between them. Do not rename either.
+
 ### One origin is load-bearing
 
 Everything is **same-origin under `graphl.in`** — the org Pages site owns `/`, each project repo
@@ -72,8 +94,10 @@ hashchange rather than sticking until a reload.
 ```
 CNAME         graphl.in   ← the custom domain. DO NOT DELETE (removing it breaks the domain).
 .nojekyll     disable Jekyll (serve files verbatim)
-index.html    site header (logo + wordmark + Courses/Labs nav) + <ol id="catalog"> panel
-styles.css    dark theme, matches the concept apps (.site* header, .idx* page + cards)
+index.html    site header (brand + empty nav + theme button) + <ol id="catalog"> panel
+              …plus the blocking inline theme boot in <head>
+styles.css    light + dark tokens, matches the concept apps (.site* header, .idx* page + cards)
+theme.js      the three-state theme control (system / light / dark)
 app.js        fetch the active section's file → render one link card per entry (→ /<slug>/)
 catalog.json  kinds (the nav) + apps (the cards) — the whole catalog, one file
 ```

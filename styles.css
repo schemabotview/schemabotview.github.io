@@ -33,15 +33,76 @@
   src: url('fonts/ibm-plex-mono-500.woff2') format('woff2');
 }
 
+/* ── Theme ────────────────────────────────────────────────────────────────────────────────────
+   Three states. No stored choice means "system", and the OS decides; an explicit choice stamps
+   data-theme="light" or "dark" on <html> and wins over the OS in both directions. index.html runs
+   a tiny blocking script in <head> that applies the stored value before first paint, or the page
+   flashes the wrong ground on every load.
+
+   The dark palette is written out twice on purpose — once for the OS preference, once for the
+   explicit toggle. Plain CSS cannot share one block between a media query and an attribute
+   selector, and `light-dark()` would do it in one but renders an unreadable page on a browser that
+   does not know the function. Duplication is the boring, safe half of that trade.
+
+   The choice lives in localStorage under `graphl:theme`, which is deliberately a PLATFORM-wide
+   key: every app is same-origin under graphl.in, so a concept app reading the same key inherits
+   the choice with no work. Keep the key and the data-theme attribute stable. */
+
 :root {
-  --bg: #1a1d23; /* Zed-slate page ground (matches the concept apps' index) */
+  color-scheme: light;
+
+  --bg: #ffffff;
+  --text: #1a1d23;
+  --muted: #5f6673; /* 6.0:1 on --bg */
+  --accent: #2f5fd8; /* platform blue, darkened for contrast on white (5.6:1) */
+  --accent-soft: rgba(47, 95, 216, 0.11); /* current nav item */
+  --line: rgba(0, 0, 0, 0.11);
+  --header-bg: rgba(0, 0, 0, 0.015);
+  --surface: rgba(0, 0, 0, 0.012); /* card ground */
+  --surface-hover: #eef1f6;
+  --hover: rgba(0, 0, 0, 0.05); /* nav link hover */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --bg: #1a1d23; /* Zed-slate page ground (matches the concept apps' index) */
+    --text: #eceef2;
+    --muted: #8b909c;
+    --accent: #5b8cff; /* platform blue — the root catalog's role accent (each concept index uses
+                          its own brand color; blue marks the platform root) */
+    --accent-soft: rgba(91, 140, 255, 0.14);
+    --line: rgba(255, 255, 255, 0.09);
+    --header-bg: rgba(255, 255, 255, 0.014);
+    --surface: rgba(255, 255, 255, 0.018);
+    --surface-hover: #22262e;
+    --hover: rgba(255, 255, 255, 0.05);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #1a1d23;
   --text: #eceef2;
-  --accent: #5b8cff; /* platform blue — the root catalog's role accent (each concept index uses its
-                        own brand color; blue marks the platform root) */
+  --muted: #8b909c;
+  --accent: #5b8cff;
+  --accent-soft: rgba(91, 140, 255, 0.14);
+  --line: rgba(255, 255, 255, 0.09);
+  --header-bg: rgba(255, 255, 255, 0.014);
+  --surface: rgba(255, 255, 255, 0.018);
+  --surface-hover: #22262e;
+  --hover: rgba(255, 255, 255, 0.05);
 }
 
 * {
   box-sizing: border-box;
+}
+/* Set by theme.js for the single frame a theme swap lands in, so the whole page changes at once
+   instead of the ground flipping while everything with a hover transition cross-fades after it. */
+.theme-swap * {
+  transition: none !important;
 }
 html,
 body {
@@ -58,8 +119,8 @@ body {
    underneath. The inner row matches the catalog's own max-width so the brand lines up with the
    cards below it. */
 .site {
-  border-bottom: 1px solid var(--idx-line, rgba(255, 255, 255, 0.09));
-  background: rgba(255, 255, 255, 0.014);
+  border-bottom: 1px solid var(--line);
+  background: var(--header-bg);
 }
 .site__inner {
   max-width: 940px;
@@ -87,26 +148,61 @@ body {
   font-weight: 700;
   letter-spacing: -0.01em;
 }
+/* Nav and the icon buttons travel together on the right, so the brand stays hard left however
+   many actions the header grows. */
+.site__right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 .site__nav {
   display: flex;
   gap: 4px;
+}
+
+/* Square icon button — the theme toggle now, the account control later. Sized 36px so it is a
+   comfortable target without towering over the 60px header row. */
+.site__icon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+  font-family: inherit;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.site__icon:hover {
+  color: var(--text);
+  background: var(--hover);
+}
+.site__icon:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 .site__link {
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 15px;
   font-weight: 600;
-  color: #8b909c;
+  color: var(--muted);
   text-decoration: none;
   transition: color 0.15s ease, background 0.15s ease;
 }
 .site__link:hover {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--hover);
 }
 .site__link[aria-current='page'] {
   color: var(--text);
-  background: rgba(91, 140, 255, 0.14);
+  background: var(--accent-soft);
 }
 .site__link:focus-visible {
   outline: 2px solid var(--accent);
@@ -117,8 +213,8 @@ body {
    index.css): a brand eyebrow over a big subject title, then a single column of cards. */
 .idx {
   --idx-accent: var(--accent);
-  --idx-muted: #8b909c;
-  --idx-line: rgba(255, 255, 255, 0.09);
+  --idx-muted: var(--muted);
+  --idx-line: var(--line);
   min-height: 100vh;
   max-width: 940px;
   margin: 0 auto;
@@ -151,7 +247,7 @@ body {
 .idx-card {
   border: 1px solid var(--idx-line);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.018);
+  background: var(--surface);
   overflow: hidden;
 }
 /* The whole card is one link: number box · concept title · arrow (matches .idx-card__head's row). */
@@ -166,7 +262,7 @@ body {
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 .idx-card__link:hover {
-  background: #22262e;
+  background: var(--surface-hover);
 }
 .idx-card__num {
   font-size: 14px;

@@ -42,8 +42,9 @@ retried the next time it is opened.
 ```
 CNAME            graphl.in   (the custom domain — do not delete)
 .nojekyll        serve files as-is (no Jekyll)
-index.html       site header (logo + wordmark + Courses/Labs nav) + catalog mount
-styles.css       dark theme (matches the concept apps)
+index.html       site header (brand + nav + theme button) + catalog mount
+styles.css       light + dark theme tokens (matches the concept apps)
+theme.js         three-state theme control (system / light / dark)
 app.js           fetch the active section's file → render one card per entry
 catalog.json     kinds (the nav) + apps (the cards)
 
@@ -51,6 +52,13 @@ package.json      no dependencies; scripts: `dev`, `check`
 scripts/serve.mjs zero-dep local server that mimics GitHub Pages
 scripts/check-catalog.mjs   validates catalog.json (`--links` checks graphl.in)
 ```
+
+## Theme
+
+Light, dark, or follow the OS — the button in the header cycles system → light → dark. The choice
+is kept in `localStorage['graphl:theme']` and applied before first paint, so there is no flash of
+the wrong background on load. Because every GraphL app is same-origin under `graphl.in`, that one
+key is enough for a concept app to inherit the same choice.
 
 ## Run locally
 

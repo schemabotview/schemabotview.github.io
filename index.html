@@ -9,6 +9,17 @@
       content="GraphL — technical concepts taught as diagrams that assemble themselves, beat by beat, in sync with the narration, plus hands-on labs you work through yourself."
     />
     <link rel="icon" type="image/svg+xml" href="icon.svg" />
+    <!-- Applies a stored theme choice BEFORE first paint. This has to be inline and blocking: as a
+         module or a deferred file it would run after the page has already painted, and every load
+         would flash the wrong background. No stored value means "system", which needs no attribute
+         — the stylesheet's prefers-color-scheme query handles it. Deliberately tiny and
+         dependency-free; theme.js does everything else once the page is up. -->
+    <script>
+      try {
+        var t = localStorage.getItem('graphl:theme')
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t
+      } catch (e) {}
+    </script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -22,7 +33,12 @@
           <img class="site__logo" src="icon.svg" alt="" width="28" height="28" />
           <span class="site__name">GraphL</span>
         </a>
-        <nav class="site__nav" id="nav" aria-label="Sections"></nav>
+        <div class="site__right">
+          <nav class="site__nav" id="nav" aria-label="Sections"></nav>
+          <!-- Cycles system → light → dark. Rendered empty; theme.js fills the glyph and the
+               label so the markup never disagrees with the active theme. -->
+          <button class="site__icon" id="theme" type="button"></button>
+        </div>
       </div>
     </header>
 
@@ -34,6 +50,7 @@
         <li class="idx__empty">Loading catalog…</li>
       </ol>
     </main>
+    <script type="module" src="theme.js"></script>
     <script type="module" src="app.js"></script>
   </body>
 </html>
