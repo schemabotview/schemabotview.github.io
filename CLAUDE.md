@@ -63,8 +63,29 @@ so "works locally" means "works on graphl.in". It reproduces: `/` → `index.htm
 and **case-sensitive paths** — macOS would happily serve `Icon.svg` for `icon.svg` and Pages
 (Linux) would 404, so a casing mismatch 404s here too and logs why.
 
-Sister apps are *not* served: a catalog card points at `/<slug>/`, which only exists on graphl.in
-or if you run that concept app yourself. Locally those links 404 — expected.
+### Sister apps are served too
+
+A catalog card points at `/<slug>/`, which on graphl.in is a **different repo's Pages deploy** —
+the org site owns `/`, each project repo owns `/<repo>/`, all inheriting this repo's `CNAME`.
+Locally the same URL is answered from that sibling checkout's build:
+
+```
+/            → this folder, verbatim          (= index repo, deployed from main)
+/aws/        → ../aws/dist/                   (= aws repo, CI-built dist artifact)
+```
+
+Those are the **same bytes Pages serves** — the concept apps set vite `base` to `/<slug>/` for the
+build, so `dist/index.html` already asks for `/aws/assets/…`. Hence mounting `dist`, not proxying
+`vite dev`: the dev server deliberately stays on base `/` at port 5173 so the record scripts work,
+and every app shares that one port.
+
+Sisters are **discovered, not listed** — any `../<slug>/dist` is mounted, so a new concept app needs
+no change here. Build it and reload; a sibling without `dist` says so instead of 404ing blankly.
+`SISTERS=/path` overrides the search directory. A real file or folder in this repo always wins, so
+the catalog can never be shadowed.
+
+The one asymmetry with production: CI runs `npm run build` on every push, locally you run it
+yourself.
 
 ## Deploy
 

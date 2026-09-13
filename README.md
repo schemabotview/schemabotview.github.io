@@ -49,8 +49,18 @@ PORT=3000 npm run dev  # another port
 
 Still no build step — the server just serves this folder the way Pages does (directory
 `index.html`, `/dir` → `/dir/` redirect, `404.html`, correct MIME types, and case-sensitive paths,
-so a `Icon.svg`/`icon.svg` slip fails locally instead of only in production). Catalog cards point
-at `/<slug>/`, which lives in another repo, so those links 404 locally.
+so a `Icon.svg`/`icon.svg` slip fails locally instead of only in production).
+
+It also serves the **sister apps**, so the catalog's cards work locally exactly as on graphl.in:
+
+```
+/        → this folder            (on GitHub: the index repo, deployed from main)
+/aws/    → ../aws/dist/           (on GitHub: the aws repo's CI-built dist)
+```
+
+Build the app first (`cd ../aws && npm run build`) — an unbuilt sibling tells you the command
+rather than 404ing. Any `../<slug>/dist` is picked up automatically; `SISTERS=/path` changes where
+to look.
 
 ## Add an entry to the catalog
 
