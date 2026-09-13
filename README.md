@@ -53,6 +53,11 @@ scripts/serve.mjs zero-dep local server that mimics GitHub Pages
 scripts/check-catalog.mjs   validates catalog.json (`--links` checks graphl.in)
 ```
 
+## Mobile
+
+Below 560px the header splits into two rows — brand and buttons on top, the section nav on its own
+full-width row that scrolls sideways rather than collapsing into a menu. Verified down to 320px.
+
 ## Theme
 
 Light, dark, or follow the OS — the button in the header cycles system → light → dark. The choice

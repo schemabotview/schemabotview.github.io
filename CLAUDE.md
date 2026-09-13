@@ -42,6 +42,22 @@ strict counterpart — see *Add an entry*.
 Each card links at that site's own app (`/<slug>/`). The index does **not** fetch or list
 courses/sections: each site owns its own navigation.
 
+### Mobile
+
+The header is **two rows below 560px**: brand and the icon buttons stay together on top, the
+section nav drops to its own full-width row beneath. One row cannot hold all three — with the
+theme button it needs 370px, which is wider than a 360px phone.
+
+That nav row **scrolls horizontally; it is not a hamburger.** The sections are the primary
+navigation and the point of the current one is being visible — a menu hides "you are here" behind
+a tap. A row that runs off the edge keeps every section one gesture away and keeps the active one
+on screen. It bleeds to the screen edges (negative margin + matching padding) so the last item can
+scroll fully into view.
+
+Touch targets are ≥ 40px on phones (the icon button grows from 36, nav links get `min-height`).
+Verified headless at 560 / 430 / 390 / 360 / 320: no horizontal overflow at any width, and with
+eight kinds injected the *nav* scrolls while the page still does not.
+
 ### Theme
 
 Three states: **system** (no stored value — the OS decides via `prefers-color-scheme`) plus

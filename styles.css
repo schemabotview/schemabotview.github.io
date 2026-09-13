@@ -126,13 +126,13 @@ body {
   max-width: 940px;
   margin: 0 auto;
   padding: 0 32px;
-  height: 60px;
+  min-height: 60px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 20px;
 }
 .site__brand {
+  margin-right: auto; /* holds the brand left; nav + actions collect on the right */
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -148,16 +148,16 @@ body {
   font-weight: 700;
   letter-spacing: -0.01em;
 }
-/* Nav and the icon buttons travel together on the right, so the brand stays hard left however
-   many actions the header grows. */
-.site__right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 .site__nav {
   display: flex;
   gap: 4px;
+}
+/* The icon buttons — theme now, the account control later. Kept separate from the nav so that on
+   a phone the nav can drop to its own row while these stay up on the brand row. */
+.site__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 /* Square icon button — the theme toggle now, the account control later. Sized 36px so it is a
@@ -188,6 +188,8 @@ body {
   outline-offset: 2px;
 }
 .site__link {
+  flex: none;
+  white-space: nowrap;
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 15px;
@@ -324,16 +326,52 @@ body {
   background: transparent;
 }
 
+/* ── Phones ───────────────────────────────────────────────────────────────────────────────────
+   The header becomes two rows: brand and actions stay together on top, the section nav drops to
+   its own full-width row beneath them. One row cannot hold all three — with the theme button the
+   header needed 370px, so 360px and 320px devices scrolled sideways.
+
+   The nav row scrolls horizontally rather than collapsing into a hamburger. There are three
+   sections today and there will be more, but they are the primary navigation and the whole point
+   of the current one is being visible; a menu would hide "you are here" behind a tap. A row that
+   runs off the edge keeps every section one gesture away and shows which is active. */
 @media (max-width: 560px) {
   .site__inner {
-    padding: 0 20px;
-    height: 56px;
+    padding: 8px 20px;
+    flex-wrap: wrap;
+    gap: 0 12px;
+  }
+  .site__nav {
+    order: 3; /* after brand and actions ⇒ its own row */
+    flex: 1 0 100%;
+    margin: 2px -20px 0; /* bleed to the screen edges so the row can scroll fully */
+    padding: 0 20px 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .site__nav::-webkit-scrollbar {
+    display: none;
   }
   .site__link {
+    display: flex;
+    align-items: center;
+    min-height: 40px; /* comfortable touch target */
     padding: 8px 10px;
     font-size: 14px;
   }
+  .site__icon {
+    width: 40px;
+    height: 40px;
+  }
   .idx {
-    padding: 24px 20px 48px;
+    padding: 20px 20px 48px;
+  }
+  /* Long names ("Databricks Data Engineer") need the room back from the gutters. */
+  .idx-card__link {
+    gap: 12px;
+    padding: 16px 18px;
+  }
+  .idx-card__title {
+    font-size: 17px;
   }
 }
