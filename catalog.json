@@ -5,30 +5,11 @@
     { "id": "coach", "label": "Coach" }
   ],
   "groups": [
-    { "id": "languages", "label": "Languages" },
     { "id": "data", "label": "Data" },
+    { "id": "languages", "label": "Languages" },
     { "id": "systems", "label": "Systems" }
   ],
   "apps": [
-    {
-      "slug": "python",
-      "kind": "courses",
-      "group": "languages",
-      "name": "Python",
-      "subject": "Python",
-      "tint": "#4b8bbe",
-      "blurb": "Syntax, objects, the standard library and concurrency, one diagram at a time."
-    },
-    {
-      "slug": "sql",
-      "kind": "courses",
-      "group": "languages",
-      "name": "SQL",
-      "subject": "SQL",
-      "tint": "#34e0d0",
-      "blurb": "Queries, schema and mutations — plus what the engine does with them."
-    },
-
     {
       "slug": "apache-spark",
       "kind": "courses",
@@ -55,6 +36,25 @@
       "subject": "Data Warehousing",
       "tint": "#5b8cff",
       "blurb": "Dimensions, facts, keys and history — how a warehouse is designed and loaded."
+    },
+
+    {
+      "slug": "python",
+      "kind": "courses",
+      "group": "languages",
+      "name": "Python",
+      "subject": "Python",
+      "tint": "#4b8bbe",
+      "blurb": "Syntax, objects, the standard library and concurrency, one diagram at a time."
+    },
+    {
+      "slug": "sql",
+      "kind": "courses",
+      "group": "languages",
+      "name": "SQL",
+      "subject": "SQL",
+      "tint": "#34e0d0",
+      "blurb": "Queries, schema and mutations — plus what the engine does with them."
     },
 
     {
