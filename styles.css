@@ -364,51 +364,169 @@ body {
   border: 0;
 }
 
-/* Concepts grid — a single column of cards (mirrors the concept index's course accordions, but each
-   card is a plain link into that concept's own site rather than an expandable accordion). */
+/* Subject groups — the page's second axis. The header nav is delivery format (Courses / Labs /
+   Coach); these headings are subject domain (Languages / Data / Systems) inside one of those
+   panels. A kind whose apps declare no group skips all of this and renders a bare grid, which is
+   what Labs and Coach do with one card each. */
+.idx__groups {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+/* Small, uppercase, muted — the pills' vocabulary rather than the cards'. It is a label for the
+   rows beneath it, and anything heavier competes with the card titles it is meant to organise. */
+.idx__group-label {
+  margin: 0 0 12px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--idx-muted);
+}
+.idx__empty {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* Concepts grid — one card per published app. Single column on phones, two up from 720px: at the
+   940px container a full-width card would stretch one sentence across the whole page and read as a
+   banner, where two columns give each card ~450px — a correct measure for the blurb. */
 .idx__grid {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 12px;
+  grid-template-columns: 1fr;
+  gap: 14px;
 }
+@media (min-width: 720px) {
+  .idx__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Each card carries its app's own brand colour as `--tint`, set inline by app.js from
+   catalog.json. An app without one falls back to the platform accent, so the default below is the
+   whole contract — nothing else here needs to know whether a tint was supplied.
+
+   `--tint-ink` is the tint made safe to read ON. Several brands (SQL's cyan, Linux's yellow) are
+   far too light for a white ground, so the light theme darkens every tint toward the page ink by a
+   fixed amount rather than special-casing the pale ones; dark theme uses the brand as published.
+   Both are only ever used for large bold glyphs and a 24px arrow, never body text.
+
+   color-mix is the one modern feature here. Each property that uses it is preceded by a flat
+   fallback, so a browser without it gets the neutral card this page had before tints existed. */
 .idx-card {
+  --tint: var(--accent);
+  --tint-ink: color-mix(in srgb, var(--tint) 62%, #1a1d23);
+  --tint-ground: color-mix(in srgb, var(--tint) 13%, transparent);
+  /* --tint-ink is sized for the 20px monogram, where 3:1 is the bar. The pill is 11px and needs
+     4.5:1, which the paler brands (SQL's cyan, Linux's yellow) miss — so it gets its own, pushed
+     a further step toward the page ink on light and toward white on dark. */
+  --tint-strong: color-mix(in srgb, var(--tint) 42%, #1a1d23);
   border: 1px solid var(--idx-line);
   border-radius: 14px;
   background: var(--surface);
   overflow: hidden;
+  transition: border-color 0.15s ease;
 }
-/* The whole card is one link: number box · concept title · arrow (matches .idx-card__head's row). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .idx-card {
+    --tint-ink: var(--tint);
+    --tint-ground: color-mix(in srgb, var(--tint) 16%, transparent);
+    --tint-strong: color-mix(in srgb, var(--tint) 72%, #ffffff);
+  }
+}
+:root[data-theme='dark'] .idx-card {
+  --tint-ink: var(--tint);
+  --tint-ground: color-mix(in srgb, var(--tint) 16%, transparent);
+  --tint-strong: color-mix(in srgb, var(--tint) 72%, #ffffff);
+}
+
+/* The whole card is one link: logo tile · (title + pills, then the blurb) · arrow. Centred rather
+   than top-aligned so an app with no blurb — a one-line body next to a 56px tile — still sits
+   level instead of hanging off the top of its own tile. */
 .idx-card__link {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 18px;
-  padding: 20px 24px;
+  gap: 16px;
+  padding: 18px 20px;
   text-decoration: none;
   color: inherit;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition: background 0.15s ease;
 }
 .idx-card__link:hover {
   background: var(--surface-hover);
+  background: color-mix(in srgb, var(--tint) 6%, var(--surface-hover));
 }
-.idx-card__num {
-  font-size: 14px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  color: var(--idx-accent);
-  border: 1px solid var(--idx-accent);
-  border-radius: 8px;
-  padding: 5px 8px;
-  line-height: 1;
+.idx-card:hover {
+  border-color: var(--idx-accent);
+  border-color: color-mix(in srgb, var(--tint) 45%, var(--idx-line));
 }
-.idx-card__title {
-  flex: 1;
-  min-width: 0;
+.idx-card__link:focus-visible {
+  outline: 2px solid var(--tint-ink);
+  outline-offset: -2px;
+  border-radius: 14px;
+}
+
+/* The tile. Holds either the app's logo or a monogram, on the same tinted ground either way, so a
+   concept still waiting for its mark reads as a different tile rather than a broken one. */
+.idx-card__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 13px;
+  background: var(--accent-soft);
+  background: var(--tint-ground);
+}
+.idx-card__logo {
+  display: block;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+.idx-card__mono {
   font-size: 20px;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--idx-accent);
+  color: var(--tint-ink);
+}
+
+.idx-card__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+/* Wraps so a long name plus a pill drops the pill to its own line instead of squeezing the name. */
+.idx-card__head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+}
+.idx-card__title {
+  font-size: 18px;
+  font-weight: 700;
   letter-spacing: -0.01em;
+}
+/* Two lines, clamped. The catalog check enforces a length that fits, so the clamp is a backstop
+   for a browser narrower than the design rather than the normal case. */
+.idx-card__desc {
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--idx-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .idx-card__arrow {
   flex: none;
@@ -418,13 +536,15 @@ body {
   transition: transform 0.15s ease, color 0.15s ease;
 }
 .idx-card__link:hover .idx-card__arrow {
-  color: var(--idx-accent);
+  color: var(--tint-ink);
   transform: translateX(3px);
 }
 
-/* Small pills after the title: "Premium" (what the catalog entry declares as `access`) and "Soon"
+/* Small pills beside the title: "Premium" (what the catalog entry declares as `access`) and "Soon"
    (an app with `status: "soon"` — listed, but not deployed yet). The premium pill is a UI hint
-   only; nothing here gates anything, since a GitHub Pages file is world-readable regardless. */
+   only; nothing here gates anything, since a GitHub Pages file is world-readable regardless.
+   The pill takes the card's tint so a card reads as one object rather than brand-coloured tile
+   plus platform-blue badge. */
 .idx-card__tag {
   flex: none;
   font-size: 11px;
@@ -432,7 +552,8 @@ body {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--idx-accent);
-  border: 1px solid var(--idx-accent);
+  color: var(--tint-strong);
+  border: 1px solid currentColor;
   border-radius: 999px;
   padding: 3px 8px;
   line-height: 1;
@@ -445,6 +566,9 @@ body {
    worse than one that says it is coming. It must therefore not look clickable. */
 .idx-card--soon {
   opacity: 0.62;
+}
+.idx-card--soon:hover {
+  border-color: var(--idx-line);
 }
 .idx-card--soon .idx-card__link {
   cursor: default;
@@ -504,12 +628,32 @@ body {
   .idx {
     padding: 20px 20px 48px;
   }
-  /* Long names ("Databricks Data Engineer") need the room back from the gutters. */
+  /* Long names ("Databricks Data Engineer") need the room back from the gutters, and the tile
+     shrinks with them. The arrow goes entirely: the whole card is the tap target, so it was only
+     ever a hover affordance, and at 360px it competes with the name for the last of the width. */
   .idx-card__link {
-    gap: 12px;
-    padding: 16px 18px;
+    gap: 13px;
+    padding: 14px 15px;
+  }
+  .idx-card__icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 11px;
+  }
+  .idx-card__logo {
+    width: 27px;
+    height: 27px;
+  }
+  .idx-card__mono {
+    font-size: 17px;
   }
   .idx-card__title {
-    font-size: 17px;
+    font-size: 16.5px;
+  }
+  .idx-card__desc {
+    font-size: 13px;
+  }
+  .idx-card__arrow {
+    display: none;
   }
 }

@@ -4,17 +4,94 @@
     { "id": "labs", "label": "Labs" },
     { "id": "coach", "label": "Coach" }
   ],
+  "groups": [
+    { "id": "languages", "label": "Languages" },
+    { "id": "data", "label": "Data" },
+    { "id": "systems", "label": "Systems" }
+  ],
   "apps": [
-    { "slug": "aws", "kind": "courses", "name": "AWS", "subject": "AWS" },
-    { "slug": "apache-spark", "kind": "courses", "name": "Apache Spark", "subject": "Apache Spark" },
-    { "slug": "python", "kind": "courses", "name": "Python", "subject": "Python" },
-    { "slug": "databricks-data-engineer", "kind": "courses", "name": "Databricks Data Engineer", "subject": "Databricks" },
-    { "slug": "sql", "kind": "courses", "name": "SQL", "subject": "SQL" },
-    { "slug": "linux", "kind": "courses", "name": "Linux", "subject": "Linux" },
-    { "slug": "data-warehousing", "kind": "courses", "name": "Data Warehousing", "subject": "Data Warehousing" },
+    {
+      "slug": "python",
+      "kind": "courses",
+      "group": "languages",
+      "name": "Python",
+      "subject": "Python",
+      "tint": "#4b8bbe",
+      "blurb": "Syntax, objects, the standard library and concurrency, one diagram at a time."
+    },
+    {
+      "slug": "sql",
+      "kind": "courses",
+      "group": "languages",
+      "name": "SQL",
+      "subject": "SQL",
+      "tint": "#34e0d0",
+      "blurb": "Queries, schema and mutations — plus what the engine does with them."
+    },
 
-    { "slug": "python-lab", "kind": "labs", "name": "Python Lab", "subject": "Python" },
+    {
+      "slug": "apache-spark",
+      "kind": "courses",
+      "group": "data",
+      "name": "Apache Spark",
+      "subject": "Apache Spark",
+      "tint": "#e25a1c",
+      "blurb": "How a Spark job really runs: the API, the architecture and streaming."
+    },
+    {
+      "slug": "databricks-data-engineer",
+      "kind": "courses",
+      "group": "data",
+      "name": "Databricks Data Engineer",
+      "subject": "Databricks",
+      "tint": "#ff3621",
+      "blurb": "Ingestion, Delta, jobs and governance — the certification, end to end."
+    },
+    {
+      "slug": "data-warehousing",
+      "kind": "courses",
+      "group": "data",
+      "name": "Data Warehousing",
+      "subject": "Data Warehousing",
+      "tint": "#5b8cff",
+      "blurb": "Dimensions, facts, keys and history — how a warehouse is designed and loaded."
+    },
 
-    { "slug": "coach", "kind": "coach", "name": "1:1 Coaching", "status": "soon", "access": "premium" }
+    {
+      "slug": "aws",
+      "kind": "courses",
+      "group": "systems",
+      "name": "AWS",
+      "subject": "AWS",
+      "tint": "#f0902f",
+      "blurb": "Compute, storage, networking and identity — how the services wire together."
+    },
+    {
+      "slug": "linux",
+      "kind": "courses",
+      "group": "systems",
+      "name": "Linux",
+      "subject": "Linux",
+      "tint": "#f2b632",
+      "blurb": "The shell, the filesystem, processes and the kernel underneath them."
+    },
+
+    {
+      "slug": "python-lab",
+      "kind": "labs",
+      "name": "Python Lab",
+      "subject": "Python",
+      "tint": "#4b8bbe",
+      "blurb": "Write and run real Python in the browser. No install, nothing to set up."
+    },
+
+    {
+      "slug": "coach",
+      "kind": "coach",
+      "name": "1:1 Coaching",
+      "status": "soon",
+      "access": "premium",
+      "blurb": "One-to-one sessions on your own code and your own roadmap."
+    }
   ]
 }

@@ -10,6 +10,11 @@
 // reload. Kind ids ARE the hash, which is why they read plural: #courses and #labs were already
 // public URLs before the catalog became data, and they still resolve.
 //
+// Two axes, deliberately kept apart. `kinds` is DELIVERY FORMAT (courses / labs / coaching) and is
+// the header nav. `groups` is SUBJECT DOMAIN (languages / data / systems) and is a heading inside
+// one kind's panel. They could not swap places: kind ids are public URLs, and a topic row in the
+// nav beside "Labs" would be asking the reader to hold two questions at once.
+//
 // Robustness rule, applied throughout: unknown or missing values DEGRADE, they never break the
 // page. An app naming a kind that no longer exists still gets a tab; an app with no name falls
 // back to its slug; a bad `status` is treated as live. The catalog is hand-edited, so the failure
@@ -65,9 +70,15 @@ function normalise(data) {
       name: a.name || a.slug,
       kind: a.kind || kinds[0]?.id || 'other',
       subject: a.subject || a.name || a.slug,
+      group: str(a.group),
       status: a.status === 'soon' ? 'soon' : 'live',
       access: a.access === 'premium' ? 'premium' : 'free',
       href: a.href || `${a.slug}/`,
+      blurb: str(a.blurb),
+      // Rejected rather than passed through: `tint` lands in an inline custom property and `icon`
+      // in a URL, so a malformed value has to become "no value", not "odd value".
+      tint: HEX.test(str(a.tint)) ? a.tint.trim() : '',
+      icon: ICON_FILE.test(str(a.icon)) ? a.icon.trim() : '',
     }))
 
   const declared = new Set(kinds.map((k) => k.id))
@@ -77,10 +88,70 @@ function normalise(data) {
     kinds.push({ id: app.kind, label: title(app.kind) })
   }
 
-  return { kinds, apps }
+  // Groups are optional in full: no `groups` array, or a kind whose apps declare none, renders the
+  // flat grid the page had before topics existed. Same degradation rule as kinds — an app naming a
+  // group nobody declared gets a heading appended rather than being dropped.
+  const groups = (Array.isArray(data?.groups) ? data.groups : [])
+    .filter((g) => g && typeof g.id === 'string')
+    .map((g) => ({ id: g.id, label: g.label || title(g.id) }))
+
+  const knownGroups = new Set(groups.map((g) => g.id))
+  for (const app of apps) {
+    if (!app.group || knownGroups.has(app.group)) continue
+    knownGroups.add(app.group)
+    groups.push({ id: app.group, label: title(app.group) })
+  }
+
+  return { kinds, groups, apps }
 }
 
 const title = (id) => id.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+
+const str = (v) => (typeof v === 'string' ? v.trim() : '')
+const HEX = /^#[0-9a-f]{6}$/i
+const ICON_FILE = /^[a-z0-9][a-z0-9-]*\.svg$/
+
+// The letterform shown when an app has no logo file yet. Derived from `subject` rather than
+// `name`, because the subject is the short form: "Databricks Data Engineer" is named for the
+// certification but subjects as "Databricks" → "Da", where the name would give "DD".
+//
+// Acronyms stay whole (AWS, SQL), two words give their initials (Data Warehousing → DW), one word
+// gives its first two letters (Python → Py). Digit-only tokens are dropped first so "1:1
+// Coaching" reads "Co" and not "1C".
+function monogram(subject) {
+  const words = subject.split(/\s+/).map((w) => w.replace(/[^A-Za-z0-9]/g, '')).filter(Boolean)
+  const letters = words.filter((w) => /[A-Za-z]/.test(w))
+  const parts = letters.length ? letters : words
+  if (!parts.length) return '?'
+  if (parts.length > 1) return (parts[0][0] + parts[1][0]).toUpperCase()
+  const one = parts[0]
+  return one.length <= 3 ? one.toUpperCase() : one[0].toUpperCase() + one[1].toLowerCase()
+}
+
+// The square left of the title: the app's own logo when `icon` names a file in icons/, otherwise
+// a monogram. Both sit on the same tinted ground, so a concept that has no logo yet is a
+// different tile rather than a broken one — which is what lets logos land one at a time.
+function tile(app) {
+  const box = el('span', 'idx-card__icon')
+  const mono = () => el('span', 'idx-card__mono', monogram(app.subject))
+
+  if (!app.icon) {
+    box.appendChild(mono())
+    return box
+  }
+
+  const img = el('img', 'idx-card__logo')
+  img.src = `icons/${app.icon}`
+  img.alt = '' // the title beside it already names the app
+  img.width = 32
+  img.height = 32
+  img.loading = 'lazy'
+  // A file that was deleted or never committed must not leave a blank square. `npm run check`
+  // catches this before a push; this catches it for a reader on the deployed site.
+  img.addEventListener('error', () => img.replaceWith(mono()), { once: true })
+  box.appendChild(img)
+  return box
+}
 
 // ---------------------------------------------------------------- render
 
@@ -99,27 +170,37 @@ function renderNav(kinds, current) {
   )
 }
 
-// A row: a numbered card linking into the site's own app (graphl.in/<slug>/). Reuses the concept
-// apps' landing vocabulary (.idx-card*) — number box · title · arrow — so the root catalog and each
-// site's own index read as one system. `i` is the zero-based position → the 01, 02… label.
+// A card linking into the site's own app (graphl.in/<slug>/): logo tile · title + pills · one
+// sentence · arrow. The tile carries that app's own brand colour, copied into the catalog as
+// `tint`, so the card and the site it opens agree; without one it falls back to the platform
+// accent. Everything downstream of the tint reads the `--tint` custom property, which is the only
+// thing set inline.
+//
+// The card used to open with an 01/02 number box. The logo replaced it: the numbers were
+// positional only, nothing referenced them, and four things ahead of the title is three too many.
 //
 // A "soon" app is deliberately not a link: it has no deploy yet, and a card that 404s is worse
 // than one that says it is coming.
-function card(app, i) {
+function card(app) {
   const li = el('li', 'idx-card')
   const soon = app.status === 'soon'
   const inner = el(soon ? 'span' : 'a', 'idx-card__link')
   if (!soon) inner.href = app.href
   if (soon) li.classList.add('idx-card--soon')
+  if (app.tint) li.style.setProperty('--tint', app.tint)
 
-  inner.appendChild(el('span', 'idx-card__num', String(i + 1).padStart(2, '0')))
-  inner.appendChild(el('span', 'idx-card__title', app.name))
+  inner.appendChild(tile(app))
 
-  if (app.access === 'premium') inner.appendChild(el('span', 'idx-card__tag', 'Premium'))
+  const body = el('span', 'idx-card__body')
+  const head = el('span', 'idx-card__head')
+  head.appendChild(el('span', 'idx-card__title', app.name))
+  if (app.access === 'premium') head.appendChild(el('span', 'idx-card__tag', 'Premium'))
+  if (soon) head.appendChild(el('span', 'idx-card__tag idx-card__tag--soon', 'Soon'))
+  body.appendChild(head)
+  if (app.blurb) body.appendChild(el('span', 'idx-card__desc', app.blurb))
+  inner.appendChild(body)
 
-  if (soon) {
-    inner.appendChild(el('span', 'idx-card__tag idx-card__tag--soon', 'Soon'))
-  } else {
+  if (!soon) {
     const arrow = el('span', 'idx-card__arrow', '→')
     arrow.setAttribute('aria-hidden', 'true')
     inner.appendChild(arrow)
@@ -129,26 +210,59 @@ function card(app, i) {
   return li
 }
 
+// One grid of cards. Used both on its own (an ungrouped kind) and inside each group section.
+function grid(apps) {
+  const ol = el('ol', 'idx__grid')
+  ol.append(...apps.map(card))
+  return ol
+}
+
+// The active kind's panel: either a flat grid, or one <section> per subject group in the order the
+// catalog declares them. The heading is a real <h2> under the sr-only <h1>, so the page has the
+// outline it looks like it has.
+//
+// Grouping is per kind, decided by the apps themselves: a kind where nobody declares a group is
+// flat, which is what Labs and Coach are with one card each. Mixing the two inside one kind is
+// legal — the stragglers collect under a trailing "More" — but `npm run check` warns, because it
+// is nearly always a forgotten field rather than a decision.
+function panel(groups, apps) {
+  if (!apps.some((a) => a.group)) return [grid(apps)]
+
+  const buckets = groups
+    .map((g) => ({ label: g.label, apps: apps.filter((a) => a.group === g.id) }))
+    .filter((b) => b.apps.length)
+
+  const rest = apps.filter((a) => !a.group)
+  if (rest.length) buckets.push({ label: 'More', apps: rest })
+
+  return buckets.map((b) => {
+    const section = el('section', 'idx__group')
+    section.appendChild(el('h2', 'idx__group-label', b.label))
+    section.appendChild(grid(b.apps))
+    return section
+  })
+}
+
 // Guards against a slow fetch for an abandoned section overwriting the one now on screen.
 let renderToken = 0
 
 async function render() {
   const token = ++renderToken
-  if (!catalog) CATALOG.replaceChildren(el('li', 'idx__empty', 'Loading…'))
+  if (!catalog) CATALOG.replaceChildren(el('p', 'idx__empty', 'Loading…'))
 
   const data = await load()
   if (token !== renderToken) return
 
   if (!data) {
     NAV.replaceChildren()
-    CATALOG.replaceChildren(el('li', 'idx__empty', 'Catalog unavailable.'))
+    CATALOG.replaceChildren(el('p', 'idx__empty', 'Catalog unavailable.'))
     return
   }
 
   const wanted = location.hash.replace(/^#\/?/, '')
   const kind = data.kinds.find((k) => k.id === wanted) || data.kinds[0]
   if (!kind) {
-    CATALOG.replaceChildren(el('li', 'idx__empty', 'Nothing published yet.'))
+    CATALOG.replaceChildren(el('p', 'idx__empty', 'Nothing published yet.'))
     return
   }
 
@@ -159,8 +273,8 @@ async function render() {
   const apps = data.apps.filter((a) => a.kind === kind.id)
   CATALOG.replaceChildren(
     ...(apps.length
-      ? apps.map(card)
-      : [el('li', 'idx__empty', `No ${kind.label.toLowerCase()} published yet.`)]),
+      ? panel(data.groups, apps)
+      : [el('p', 'idx__empty', `No ${kind.label.toLowerCase()} published yet.`)]),
   )
 }
 

@@ -12,16 +12,21 @@ both the sections in the header nav and the cards under them:
 
 ```jsonc
 {
-  "kinds": [ { "id": "courses", "label": "Courses" }, { "id": "labs", "label": "Labs" }, … ],
-  "apps":  [ { "slug": "python", "kind": "courses", "name": "Python" }, … ]
+  "kinds":  [ { "id": "courses", "label": "Courses" }, { "id": "labs", "label": "Labs" }, … ],
+  "groups": [ { "id": "languages", "label": "Languages" }, { "id": "data", "label": "Data" }, … ],
+  "apps":   [ { "slug": "python", "kind": "courses", "group": "languages", "name": "Python",
+               "tint": "#4b8bbe", "blurb": "Syntax, objects, the standard library …" }, … ]
 }
 ```
 
 Listing a new site is **adding one object to `apps`**; a whole new *kind* of site adds one to
-`kinds`. Nothing else changes. Optional per app: `subject` (groups `python` with `python-lab`),
+`kinds`. Nothing else changes. Optional per app: `group` (which heading it sits under), `blurb`
+(the sentence under the title), `tint`
+(the card's brand colour, copied from that repo's own `--brand`), `icon` (a mark in `icons/`),
+`subject` (groups `python` with `python-lab`, and supplies the monogram when there is no icon),
 `status` (`soon` shows a non-clickable card, `hidden` omits it), `access` (`premium` shows a pill).
-Missing or unknown values degrade rather than breaking the page — `npm run check` is the strict
-counterpart.
+Missing or unknown values degrade rather than breaking the page — no blurb is a bare title row, no
+tint is the platform accent, no icon is a monogram tile. `npm run check` is the strict counterpart.
 
 Every card links into that site's own app at `graphl.in/<slug>/`, where the slug is the repo name.
 The index never fetches or lists courses/sections — each site owns its own navigation. All
@@ -31,7 +36,18 @@ across every app.
 The page is ordinary site chrome — a header with the logo and wordmark on the left, the section
 nav on the right — and the nav items are plain `#courses` / `#labs` anchors. The card list starts
 straight after: no visible heading, description or count, since the highlighted nav item and the
-numbered cards already say all three. The `<h1>` is visually hidden, kept for structure.
+cards themselves already say all three. The `<h1>` is visually hidden, kept for structure.
+
+Cards are grouped by subject — **Languages**, **Data**, **Systems** — as headings inside the
+active tab. That is a second axis from the nav: the nav is *delivery format* (courses, labs,
+coaching), the headings are *subject domain*. A tab whose apps declare no group renders one flat
+grid instead, which is what Labs and Coach do with a single card each.
+
+A card is **logo tile · title + pills · one sentence · arrow**, one column on phones and two from
+720px up. The tile carries that app's own brand colour, and so do the pills, the hover border and
+the arrow — the card background stays neutral, because seven saturated grounds in a grid read as
+noise. An app with no mark in `icons/` gets its initials on the same tinted ground, which is what
+lets logos land one concept at a time.
 
 The active section lives in the hash, so it is linkable and survives a reload. An unknown hash
 falls back to Courses. A broken data file shows "Catalog unavailable." on that section only, and is
@@ -49,6 +65,7 @@ auth.js          Google sign-in + account menu + subscription state
 firebase-config.js  public Firebase web config (shared project) and pinned SDK URL
 app.js           fetch the active section's file → render one card per entry
 catalog.json     kinds (the nav) + apps (the cards)
+icons/           brand marks, one SVG per slug (see icons/README.md)
 
 package.json      no dependencies; scripts: `dev`, `check`
 scripts/serve.mjs zero-dep local server that mimics GitHub Pages

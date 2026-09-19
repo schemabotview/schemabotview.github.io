@@ -49,9 +49,12 @@
       <!-- The nav's current item is the visible "you are here", and the cards are numbered, so the
            page needs no heading or count of its own. The <h1> is kept for structure only. -->
       <h1 class="sr-only" id="subject">Courses</h1>
-      <ol id="catalog" class="idx__grid">
-        <li class="idx__empty">Loading catalog…</li>
-      </ol>
+      <!-- app.js fills this with one <section> per subject group — an <h2> over that group's own
+           card grid — or with a single ungrouped grid when the active kind declares no groups.
+           Empty here for the same reason the nav is: the shape comes from catalog.json. -->
+      <div id="catalog" class="idx__groups">
+        <p class="idx__empty">Loading catalog…</p>
+      </div>
     </main>
     <script type="module" src="theme.js"></script>
     <script type="module" src="app.js"></script>

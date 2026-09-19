@@ -14,8 +14,9 @@ nav. **Everything the site lists comes from one file, `catalog.json`** — the s
 
 ```jsonc
 {
-  "kinds": [ { "id": "courses", "label": "Courses" }, … ],
-  "apps":  [ { "slug": "python", "kind": "courses", "name": "Python", "subject": "Python" }, … ]
+  "kinds":  [ { "id": "courses", "label": "Courses" }, … ],   // the header nav
+  "groups": [ { "id": "languages", "label": "Languages" }, … ], // headings inside a panel
+  "apps":   [ { "slug": "python", "kind": "courses", "group": "languages", … }, … ]
 }
 ```
 
@@ -29,8 +30,12 @@ Every field but `slug` is optional:
 |---|---|---|
 | `slug` | — | required, unique. The link is `/<slug>/`, and the slug **is the repo name**. |
 | `kind` | first kind | which tab. An undeclared kind gets a tab appended rather than vanishing. |
+| `group` | none | which heading inside that tab. Undeclared ⇒ a heading is appended; omitted in an otherwise grouped kind ⇒ a trailing "More". |
 | `name` | the slug | card title |
-| `subject` | the name | groups an app with its siblings (`python` + `python-lab` → Python) |
+| `subject` | the name | groups an app with its siblings (`python` + `python-lab` → Python), **and** is what the monogram is derived from — the short form, so "Databricks Data Engineer" subjects as "Databricks" and tiles as "Da" |
+| `blurb` | none | the sentence under the title. Clamped to two lines; `check` errors past 90 chars |
+| `tint` | `--accent` | the card's brand colour, copied from that repo's own `--brand` |
+| `icon` | monogram | a filename in `icons/`. Absent ⇒ the subject's initials on the same tinted ground |
 | `status` | `live` | `soon` renders a non-clickable card; `hidden` omits it entirely |
 | `access` | `free` | `premium` renders a pill. **UI only** — a Pages file is world-readable. |
 | `href` | `/<slug>/` | escape hatch for an app off Pages. Should stay unused (see below). |
@@ -41,6 +46,64 @@ strict counterpart — see *Add an entry*.
 
 Each card links at that site's own app (`/<slug>/`). The index does **not** fetch or list
 courses/sections: each site owns its own navigation.
+
+### Two axes: kinds and groups
+
+**`kinds` is delivery format** — Courses / Labs / Coach — and it is the **header nav**. **`groups`
+is subject domain** — Languages / Data / Systems — and it is a **heading inside one kind's panel**.
+
+They cannot swap places. Kind ids *are* the URL hash and `#courses` / `#labs` are published links,
+so the nav is not free to change; and a topic sitting in that row next to "Labs" would ask the
+reader to hold two questions at once ("is Python Lab a lab or a language?"). One axis navigates,
+the other organises what the navigation landed on.
+
+`groups` is **optional in full**. No `groups` array — or a kind whose apps declare none — renders
+the flat grid the page had before topics existed, which is what Labs and Coach do with one card
+each. Grouping is decided per kind, by the apps themselves.
+
+Current split, chosen because it balances (2 / 3 / 2) and keeps balancing as the scaffolded
+concepts land — Java → Languages, Docker + Kubernetes → Systems:
+
+| | |
+|---|---|
+| **Languages** | Python · SQL |
+| **Data** | Apache Spark · Databricks Data Engineer · Data Warehousing |
+| **Systems** | AWS · Linux |
+
+SQL is under Languages because that is what it is, and because Data-with-four would leave Languages
+holding Python alone. It is the one debatable placement.
+
+**There is no AI/ML group, deliberately.** An empty heading advertises a gap, and `coach` already
+carries the "coming" signal. Declare it on the day the first course ships — one object in `groups`,
+one field on the app. `npm run check` warns about a declared group nobody is in, so an aspirational
+heading cannot be left behind by accident.
+
+Order within a group is **file order**, so `apps` is kept sorted by group to match what renders.
+
+### The card
+
+`logo tile · (title + pills, then one sentence) · arrow`. It used to open with an 01/02 number box;
+the tile replaced it when blurbs arrived — the numbers were positional only, nothing referenced
+them, and four things ahead of the title is three too many.
+
+**One column on phones, two from 720px up.** At the 940px container a full-width card stretches one
+sentence across the whole page and reads as a banner; two columns give each card ~450px, which is a
+correct measure for the blurb. The arrow is hidden on phones — the whole card is the tap target, so
+it was only ever a hover affordance.
+
+**Brand colour is restrained on purpose.** Each card sets `--tint` inline from its `tint`, and
+everything downstream reads that property: the tile ground, the monogram, the pills, the hover
+border and wash, the arrow on hover, the focus ring. Not the card background — seven saturated
+grounds side by side in a grid read as noise rather than as a system.
+
+Two derived tokens do the contrast work, because a published brand colour is not a readable one.
+`--tint-ink` (the 20px monogram, where 3:1 is the bar) darkens every tint toward the page ink on
+light and uses the brand as published on dark; `--tint-strong` (the 11px pill, where the bar is
+4.5:1) pushes a further step. Both are uniform rather than special-casing the pale brands, so a new
+`tint` needs no thought. Measured in-browser: light 3.3–5.8:1, dark 3.7–7.2:1.
+
+`color-mix` is the one modern feature on the page. **Every property using it is preceded by a flat
+fallback**, so a browser without it gets the neutral card this page had before tints existed.
 
 ### Sign-in and the subscription
 
@@ -127,7 +190,8 @@ warns when it is set.
 Layout is conventional site chrome: a header with the logo + wordmark on the left and the section
 nav on the right, then the card list — nothing between them. **The page body carries no visible
 heading, description or count by design.** The nav's current item is the visible "you are here" and
-the cards are numbered, so anything in that slot restates what is already on screen; the `<h1>` is
+each card now names and describes itself, so anything in that slot restates what is already on
+screen; the `<h1>` is
 `sr-only`, kept for structure; the kind's `label` supplies it and `document.title`. The `<nav>` in
 `index.html` is **empty** — `app.js` fills it from `kinds`. The links it writes are **plain
 anchors** to `#<id>`, so activation, keyboard, middle-click and copy-link are the browser's job;
@@ -146,7 +210,7 @@ hashchange rather than sticking until a reload.
 ```
 CNAME         graphl.in   ← the custom domain. DO NOT DELETE (removing it breaks the domain).
 .nojekyll     disable Jekyll (serve files verbatim)
-index.html    site header (brand + empty nav + theme button) + <ol id="catalog"> panel
+index.html    site header (brand + empty nav + theme button) + <div id="catalog"> panel
               …plus the blocking inline theme boot in <head>
 styles.css    light + dark tokens, matches the concept apps (.site* header, .idx* page + cards)
 theme.js      the three-state theme control (system / light / dark)
@@ -154,6 +218,8 @@ auth.js       Google sign-in, the account menu, and the shared subscription
 firebase-config.js  the EXISTING project's public web config + the pinned SDK URL
 app.js        fetch the active section's file → render one link card per entry (→ /<slug>/)
 catalog.json  kinds (the nav) + apps (the cards) — the whole catalog, one file
+icons/        brand marks, one SVG per slug. Empty of marks today — every card is a monogram.
+              See icons/README.md before adding one.
 ```
 
 Not part of the published site, only the local workflow:
@@ -224,9 +290,13 @@ publish titles were split into each repo's `scripts/titles.json`.
    inherited from this repo's `CNAME`, so a project repo published under the org serves at
    `graphl.in/<repo>/` — the repo name is the slug. To list it before it ships, add it with
    `"status": "soon"` and drop that field on the day it goes live.
-2. Add one object to `apps` in `catalog.json`. A new **kind** of app also gets an entry in
-   `kinds` — that is the only reason to touch anything else.
-3. `npm run check` before pushing. `npm run check -- --links` additionally HEADs every live entry
+2. Add one object to `apps` in `catalog.json`, with a `group`. A new **kind** of app also gets an
+   entry in `kinds`, and a genuinely new subject domain one in `groups` — those are the only
+   reasons to touch anything else. Keep `apps` sorted by group: file order is render order.
+3. Give it a `blurb` and a `tint` (copy the repo's own `--brand`). Both are optional and both
+   degrade — no blurb is a bare title row, no tint is the platform accent — but a card without
+   them is the weakest one on the page, so `check` warns about a missing blurb.
+4. `npm run check` before pushing. `npm run check -- --links` additionally HEADs every live entry
    against graphl.in, which is what turns step 1 from a rule someone remembers into one the repo
    enforces — a live entry that does not answer 200 fails the check.
 
