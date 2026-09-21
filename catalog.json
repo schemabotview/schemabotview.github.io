@@ -37,6 +37,15 @@
       "tint": "#5b8cff",
       "blurb": "Dimensions, facts, keys and history — how a warehouse is designed and loaded."
     },
+    {
+      "slug": "snowflake",
+      "kind": "courses",
+      "group": "data",
+      "name": "Snowflake",
+      "subject": "Snowflake",
+      "tint": "#29b5e8",
+      "blurb": "Storage split from compute — warehouses, loading, sharing and Cortex."
+    },
 
     {
       "slug": "python",
