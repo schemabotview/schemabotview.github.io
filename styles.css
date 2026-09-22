@@ -488,6 +488,19 @@ body {
   height: 32px;
   object-fit: contain;
 }
+/* A house glyph: our own mark for a concept with no vendor logo (SQL, Data Warehousing), or one
+   whose logo we do not license (AWS). The file carries geometry only and is painted here through
+   `mask`, so the glyph takes exactly the `--tint-ink` the monogram takes — including the light
+   theme's darkening, without which the pale brands would wash out. */
+.idx-card__glyph {
+  display: block;
+  width: 32px;
+  height: 32px;
+  background-color: var(--idx-accent);
+  background-color: var(--tint-ink);
+  -webkit-mask: var(--glyph) center / contain no-repeat;
+  mask: var(--glyph) center / contain no-repeat;
+}
 .idx-card__mono {
   font-size: 20px;
   font-weight: 700;
@@ -641,6 +654,10 @@ body {
     border-radius: 11px;
   }
   .idx-card__logo {
+    width: 27px;
+    height: 27px;
+  }
+  .idx-card__glyph {
     width: 27px;
     height: 27px;
   }

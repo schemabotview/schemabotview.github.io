@@ -135,10 +135,20 @@ for (const [i, a] of (apps ?? []).entries()) {
   // platform accent, which is right for an app that has no brand of its own yet.
   if (a.tint != null && (typeof a.tint !== 'string' || !HEX.test(a.tint))) err(`${at}.tint must be a 6-digit hex colour like "#4b8bbe"`)
 
-  // A filename inside icons/, not a path — the folder is the whole namespace.
+  // A filename inside icons/, not a path — the folder is the whole namespace. `icon` is a vendor's
+  // published logo rendered in an <img>; `glyph` is one of ours, painted through a CSS mask. An
+  // app has at most one: they fill the same square, and `icon` would simply win.
   if (a.icon != null) {
     if (typeof a.icon !== 'string' || !ICON_FILE.test(a.icon)) err(`${at}.icon must be a filename like "python.svg" inside icons/`)
     else if (!iconFiles.has(a.icon)) err(`${at}.icon "${a.icon}" is not in icons/ — the card would silently fall back to a monogram`)
+  }
+
+  // A missing glyph file is stricter than a missing icon: an <img> falls back to the monogram at
+  // runtime, but a mask with nothing to mask paints an empty square. This check is the only guard.
+  if (a.glyph != null) {
+    if (typeof a.glyph !== 'string' || !ICON_FILE.test(a.glyph)) err(`${at}.glyph must be a filename like "sql.svg" inside icons/`)
+    else if (!iconFiles.has(a.glyph)) err(`${at}.glyph "${a.glyph}" is not in icons/ — the tile would render empty, with no monogram to fall back to`)
+    if (a.icon != null) err(`${at} sets both icon and glyph — the tile holds one mark, and icon would win`)
   }
 
   if (a.status != null && !STATUS.includes(a.status)) err(`${at}.status "${a.status}" must be one of ${STATUS.join(' | ')}`)

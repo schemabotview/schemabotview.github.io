@@ -35,7 +35,8 @@ Every field but `slug` is optional:
 | `subject` | the name | groups an app with its siblings (`python` + `python-lab` → Python), **and** is what the monogram is derived from — the short form, so "Databricks Data Engineer" subjects as "Databricks" and tiles as "Da" |
 | `blurb` | none | the sentence under the title. Clamped to two lines; `check` errors past 90 chars |
 | `tint` | `--accent` | the card's brand colour, copied from that repo's own `--brand` |
-| `icon` | monogram | a filename in `icons/`. Absent ⇒ the subject's initials on the same tinted ground |
+| `icon` | monogram | a vendor's own logo: a filename in `icons/`, rendered in an `<img>` as published |
+| `glyph` | monogram | one of our house marks: a filename in `icons/`, painted through a CSS `mask` so it takes the card's `--tint-ink`. Mutually exclusive with `icon`; absent ⇒ the subject's initials on the same tinted ground |
 | `status` | `live` | `soon` renders a non-clickable card; `hidden` omits it entirely |
 | `access` | `free` | `premium` renders a pill. **UI only** — a Pages file is world-readable. |
 | `href` | `/<slug>/` | escape hatch for an app off Pages. Should stay unused (see below). |
@@ -85,6 +86,20 @@ Order within a group is **file order**, so `apps` is kept sorted by group to mat
 `logo tile · (title + pills, then one sentence) · arrow`. It used to open with an 01/02 number box;
 the tile replaced it when blurbs arrived — the numbers were positional only, nothing referenced
 them, and four things ahead of the title is three too many.
+
+**The tile has three tiers**, all on the same tinted ground: a vendor's logo (`icon`), else one of
+our house glyphs (`glyph`), else the subject's monogram. The split between the first two is not
+cosmetic. A vendor logo is published art and is rendered **as published**, in an `<img>`; a house
+glyph is ours and carries **no colour at all**, painted through a CSS `mask` so it inherits the
+card's `--tint-ink` — including the light theme's darkening, without which SQL's cyan and Linux's
+ochre wash out on white. An `<img>` cannot read a custom property, which is the whole reason for
+two mechanisms rather than one.
+
+Four cards are house glyphs: SQL, Data Warehousing and 1:1 Coaching have no vendor to borrow from,
+and **AWS is deliberate** — Amazon does not license the AWS mark for third-party course branding,
+so that card gets a cloud of our own. Linux is a glyph too, for a rendering reason rather than a
+legal one: Tux is 47 shapes and gradients that turn to mud at 32px, with a black body that
+disappears into a dark card.
 
 **One column on phones, two from 720px up.** At the 940px container a full-width card stretches one
 sentence across the whole page and reads as a banner; two columns give each card ~450px, which is a
@@ -218,8 +233,9 @@ auth.js       Google sign-in, the account menu, and the shared subscription
 firebase-config.js  the EXISTING project's public web config + the pinned SDK URL
 app.js        fetch the active section's file → render one link card per entry (→ /<slug>/)
 catalog.json  kinds (the nav) + apps (the cards) — the whole catalog, one file
-icons/        brand marks, one SVG per slug. Empty of marks today — every card is a monogram.
-              See icons/README.md before adding one.
+icons/        marks, one SVG per slug — vendor logos (`icon`) and house glyphs (`glyph`).
+              See icons/README.md before adding one: a vendor lockup must be cropped to its
+              mark, and a house glyph carries no colour of its own.
 ```
 
 Not part of the published site, only the local workflow:
@@ -316,4 +332,9 @@ publish titles were split into each repo's `scripts/titles.json`.
   above (deploy first) applies to labs too. It joins `catalog.json` once `graphl.in/aws-lab/` serves.
 - This repo previously held a **built SPA** (an older GraphL catalog); it was replaced by this static
   site on request. The old build is recoverable from git history if ever needed.
+- **Every card has a mark** as of 2026-09-22 — the `icons/` folder was empty until then and every
+  card was a monogram. Four vendor logos over five cards (`python.svg` serves Python and Python Lab
+  both · Snowflake · Apache Spark · Databricks) and five house glyphs (AWS · SQL · Data Warehousing
+  · Linux · Coach). The monogram path is still live and still the fallback for the next concept to
+  land.
 - Working agreement (inherited): one reviewed slice at a time; explain before writing.

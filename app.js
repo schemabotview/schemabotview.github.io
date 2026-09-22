@@ -79,6 +79,7 @@ function normalise(data) {
       // in a URL, so a malformed value has to become "no value", not "odd value".
       tint: HEX.test(str(a.tint)) ? a.tint.trim() : '',
       icon: ICON_FILE.test(str(a.icon)) ? a.icon.trim() : '',
+      glyph: ICON_FILE.test(str(a.glyph)) ? a.glyph.trim() : '',
     }))
 
   const declared = new Set(kinds.map((k) => k.id))
@@ -128,14 +129,27 @@ function monogram(subject) {
   return one.length <= 3 ? one.toUpperCase() : one[0].toUpperCase() + one[1].toLowerCase()
 }
 
-// The square left of the title: the app's own logo when `icon` names a file in icons/, otherwise
-// a monogram. Both sit on the same tinted ground, so a concept that has no logo yet is a
-// different tile rather than a broken one — which is what lets logos land one at a time.
+// The square left of the title, in three tiers on the same tinted ground: the vendor's own logo
+// when `icon` names a file in icons/, else our house glyph when `glyph` does, else a monogram. A
+// concept with no mark yet is a different tile rather than a broken one — which is what lets
+// marks land one at a time.
+//
+// The two file tiers render differently on purpose. A vendor logo is published art and goes in an
+// <img> exactly as it came, colours and all. A house glyph is ours and carries no colour at all:
+// it is painted through CSS `mask`, which hands it the very `--tint-ink` the monogram uses, so it
+// inherits the light-theme darkening the pale brands (SQL's cyan, Linux's yellow) need. An <img>
+// could not read a custom property, and a hard-coded colour would fail one theme or the other.
 function tile(app) {
   const box = el('span', 'idx-card__icon')
   const mono = () => el('span', 'idx-card__mono', monogram(app.subject))
 
   if (!app.icon) {
+    if (app.glyph) {
+      const span = el('span', 'idx-card__glyph')
+      span.style.setProperty('--glyph', `url(icons/${app.glyph})`)
+      box.appendChild(span)
+      return box
+    }
     box.appendChild(mono())
     return box
   }

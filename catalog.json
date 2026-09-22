@@ -17,6 +17,7 @@
       "name": "Apache Spark",
       "subject": "Apache Spark",
       "tint": "#e25a1c",
+      "icon": "apache-spark.svg",
       "blurb": "How a Spark job really runs: the API, the architecture and streaming."
     },
     {
@@ -26,6 +27,7 @@
       "name": "Databricks Data Engineer",
       "subject": "Databricks",
       "tint": "#ff3621",
+      "icon": "databricks-data-engineer.svg",
       "blurb": "Ingestion, Delta, jobs and governance — the certification, end to end."
     },
     {
@@ -35,6 +37,7 @@
       "name": "Data Warehousing",
       "subject": "Data Warehousing",
       "tint": "#5b8cff",
+      "glyph": "data-warehousing.svg",
       "blurb": "Dimensions, facts, keys and history — how a warehouse is designed and loaded."
     },
     {
@@ -44,6 +47,7 @@
       "name": "Snowflake",
       "subject": "Snowflake",
       "tint": "#29b5e8",
+      "icon": "snowflake.svg",
       "blurb": "Storage split from compute — warehouses, loading, sharing and Cortex."
     },
 
@@ -54,6 +58,7 @@
       "name": "Python",
       "subject": "Python",
       "tint": "#4b8bbe",
+      "icon": "python.svg",
       "blurb": "Syntax, objects, the standard library and concurrency, one diagram at a time."
     },
     {
@@ -63,6 +68,7 @@
       "name": "SQL",
       "subject": "SQL",
       "tint": "#34e0d0",
+      "glyph": "sql.svg",
       "blurb": "Queries, schema and mutations — plus what the engine does with them."
     },
 
@@ -73,6 +79,7 @@
       "name": "AWS",
       "subject": "AWS",
       "tint": "#f0902f",
+      "glyph": "aws.svg",
       "blurb": "Compute, storage, networking and identity — how the services wire together."
     },
     {
@@ -82,6 +89,7 @@
       "name": "Linux",
       "subject": "Linux",
       "tint": "#f2b632",
+      "glyph": "linux.svg",
       "blurb": "The shell, the filesystem, processes and the kernel underneath them."
     },
 
@@ -91,6 +99,7 @@
       "name": "Python Lab",
       "subject": "Python",
       "tint": "#4b8bbe",
+      "icon": "python.svg",
       "blurb": "Write and run real Python in the browser. No install, nothing to set up."
     },
 
@@ -100,6 +109,7 @@
       "name": "1:1 Coaching",
       "status": "soon",
       "access": "premium",
+      "glyph": "coach.svg",
       "blurb": "One-to-one sessions on your own code and your own roadmap."
     }
   ]
