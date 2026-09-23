@@ -184,14 +184,18 @@ function renderNav(kinds, current) {
   )
 }
 
-// A card linking into the site's own app (graphl.in/<slug>/): logo tile · title + pills · one
-// sentence · arrow. The tile carries that app's own brand colour, copied into the catalog as
-// `tint`, so the card and the site it opens agree; without one it falls back to the platform
-// accent. Everything downstream of the tint reads the `--tint` custom property, which is the only
-// thing set inline.
+// A card linking into the site's own app (graphl.in/<slug>/): logo tile · title + pills. That is
+// the whole card — the blurb and the arrow were both taken out when the catalog outgrew one
+// screen, because the reader's first question here is "what is published?", which is answered by
+// seeing every concept at once and not by reading twelve sentences.
 //
-// The card used to open with an 01/02 number box. The logo replaced it: the numbers were
-// positional only, nothing referenced them, and four things ahead of the title is three too many.
+// The tile carries that app's own brand colour, copied into the catalog as `tint`, so the card and
+// the site it opens agree; without one it falls back to the platform accent. Everything downstream
+// of the tint reads the `--tint` custom property, which is the only thing set inline.
+//
+// The blurb is still authored, still checked, and still here — as the link's `title`, so a reader
+// who wants the sentence can hover for it. That is deliberately a mouse-only affordance: the
+// sentence is a nicety, the name and the mark are the content.
 //
 // A "soon" app is deliberately not a link: it has no deploy yet, and a card that 404s is worse
 // than one that says it is coming.
@@ -202,23 +206,15 @@ function card(app) {
   if (!soon) inner.href = app.href
   if (soon) li.classList.add('idx-card--soon')
   if (app.tint) li.style.setProperty('--tint', app.tint)
+  if (app.blurb) inner.title = app.blurb
 
   inner.appendChild(tile(app))
 
-  const body = el('span', 'idx-card__body')
   const head = el('span', 'idx-card__head')
   head.appendChild(el('span', 'idx-card__title', app.name))
   if (app.access === 'premium') head.appendChild(el('span', 'idx-card__tag', 'Premium'))
   if (soon) head.appendChild(el('span', 'idx-card__tag idx-card__tag--soon', 'Soon'))
-  body.appendChild(head)
-  if (app.blurb) body.appendChild(el('span', 'idx-card__desc', app.blurb))
-  inner.appendChild(body)
-
-  if (!soon) {
-    const arrow = el('span', 'idx-card__arrow', '→')
-    arrow.setAttribute('aria-hidden', 'true')
-    inner.appendChild(arrow)
-  }
+  inner.appendChild(head)
 
   li.appendChild(inner)
   return li

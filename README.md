@@ -21,12 +21,12 @@ both the sections in the header nav and the cards under them:
 
 Listing a new site is **adding one object to `apps`**; a whole new *kind* of site adds one to
 `kinds`. Nothing else changes. Optional per app: `group` (which heading it sits under), `blurb`
-(the sentence under the title), `tint`
+(the card's hover tooltip), `tint`
 (the card's brand colour, copied from that repo's own `--brand`), `icon` (a mark in `icons/`),
 `subject` (groups `python` with `python-lab`, and supplies the monogram when there is no icon),
 `status` (`soon` shows a non-clickable card, `hidden` omits it), `access` (`premium` shows a pill).
-Missing or unknown values degrade rather than breaking the page — no blurb is a bare title row, no
-tint is the platform accent, no icon is a monogram tile. `npm run check` is the strict counterpart.
+Missing or unknown values degrade rather than breaking the page — no blurb is a card with no
+tooltip, no tint is the platform accent, no icon is a monogram tile. `npm run check` is the strict counterpart.
 
 Every card links into that site's own app at `graphl.in/<slug>/`, where the slug is the repo name.
 The index never fetches or lists courses/sections — each site owns its own navigation. All
@@ -38,16 +38,18 @@ nav on the right — and the nav items are plain `#courses` / `#labs` anchors. T
 straight after: no visible heading, description or count, since the highlighted nav item and the
 cards themselves already say all three. The `<h1>` is visually hidden, kept for structure.
 
-Cards are grouped by subject — **Data**, **Languages**, **People**, **Systems** — as headings
+Cards are grouped by subject — **AI/ML**, **Data**, **Languages**, **People**, **Systems** — as headings
 inside the active tab. That is a second axis from the nav: the nav is *delivery format* (courses,
 labs, coaching), the headings are *subject domain*. A tab whose apps declare no group renders one
 flat grid instead, which is what Labs and Coach do with a single card each.
 
-A card is **logo tile · title + pills · one sentence · arrow**, one column on phones and two from
-720px up. The tile carries that app's own brand colour, and so do the pills, the hover border and
-the arrow — the card background stays neutral, because seven saturated grounds in a grid read as
-noise. An app with no mark in `icons/` gets its initials on the same tinted ground, which is what
-lets logos land one concept at a time.
+A card is **logo tile · title + pills** — as many per row as fit (3 at the full container, 2 on a
+tablet, 1 on a phone), so the whole catalog lands on one screen instead of a page you scroll and
+try to remember. The blurb each entry carries is the card's hover tooltip rather than body text.
+The tile carries that app's own brand colour, and so do the pills and the hover border — the card
+background stays neutral, because a dozen saturated grounds in a grid read as noise. An app with no
+mark in `icons/` gets its initials on the same tinted ground, which is what lets logos land one
+concept at a time.
 
 The active section lives in the hash, so it is linkable and survives a reload. An unknown hash
 falls back to Courses. A broken data file shows "Catalog unavailable." on that section only, and is

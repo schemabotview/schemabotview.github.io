@@ -27,8 +27,10 @@ const ACCESS = ['free', 'premium']
 const HEX = /^#[0-9a-f]{6}$/i
 const ICON_FILE = /^[a-z0-9][a-z0-9-]*\.svg$/
 
-// The card clamps a blurb to two lines. Past roughly this length the tail is invisible on a
-// laptop and the author never finds out, so the cap is an error rather than a warning.
+// The blurb is the card's hover tooltip (the card itself is mark + name since 2026-09-23). A
+// tooltip has no clamp, so this cap is now about the sentence staying a sentence — one line a
+// reader takes in at a glance, not a paragraph parked over the card. Still an error: the length
+// was authored against it, and a blurb that outgrows it is drifting into the app's own copy.
 const BLURB_MAX = 90
 
 // Files actually present in icons/. An `icon` naming a file that is not there falls back to a
@@ -123,13 +125,13 @@ for (const [i, a] of (apps ?? []).entries()) {
     else if (!groupIds.has(a.group)) warn(`${at}.group "${a.group}" is not declared in groups — a heading will be auto-appended`)
   }
 
-  // The one sentence under the title. Optional — without it the card is a bare title row, which
-  // is what every card was before blurbs existed.
+  // The card's tooltip. Optional — without it the card simply has none, which is what every card
+  // had before blurbs existed.
   if (a.blurb != null) {
     if (typeof a.blurb !== 'string') err(`${at}.blurb must be a string`)
-    else if (a.blurb.length > BLURB_MAX) err(`${at}.blurb is ${a.blurb.length} chars — the card clamps at two lines, keep it under ${BLURB_MAX}`)
+    else if (a.blurb.length > BLURB_MAX) err(`${at}.blurb is ${a.blurb.length} chars — it is the card's tooltip, keep it under ${BLURB_MAX}`)
     else if (!a.blurb.trim()) err(`${at}.blurb is empty — omit the field instead`)
-  } else warn(`${at} has no blurb — the card will show a bare title`)
+  } else warn(`${at} has no blurb — the card will have no tooltip`)
 
   // The app's own --brand, copied here so the card and the site it opens agree. Absent ⇒ the
   // platform accent, which is right for an app that has no brand of its own yet.

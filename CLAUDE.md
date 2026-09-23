@@ -33,7 +33,7 @@ Every field but `slug` is optional:
 | `group` | none | which heading inside that tab. Undeclared ⇒ a heading is appended; omitted in an otherwise grouped kind ⇒ a trailing "More". |
 | `name` | the slug | card title |
 | `subject` | the name | groups an app with its siblings (`python` + `python-lab` → Python), **and** is what the monogram is derived from — the short form, so "Databricks Data Engineer" subjects as "Databricks" and tiles as "Da" |
-| `blurb` | none | the sentence under the title. Clamped to two lines; `check` errors past 90 chars |
+| `blurb` | none | the card's hover tooltip (the link's `title`). Not drawn on the card since 2026-09-23; `check` still errors past 90 chars |
 | `tint` | `--accent` | the card's brand colour, copied from that repo's own `--brand` |
 | `icon` | monogram | a vendor's own logo: a filename in `icons/`, rendered in an `<img>` as published |
 | `glyph` | monogram | one of our house marks: a filename in `icons/`, painted through a CSS `mask` so it takes the card's `--tint-ink`. Mutually exclusive with `icon`; absent ⇒ the subject's initials on the same tinted ground |
@@ -95,9 +95,25 @@ Order within a group is **file order**, so `apps` is kept sorted by group to mat
 
 ### The card
 
-`logo tile · (title + pills, then one sentence) · arrow`. It used to open with an 01/02 number box;
-the tile replaced it when blurbs arrived — the numbers were positional only, nothing referenced
-them, and four things ahead of the title is three too many.
+`logo tile · title + pills`. That is the whole card. It has been through three shapes: an 01/02
+number box then the title; then the tile plus a blurb and an arrow when the cards became
+descriptive; and since **2026-09-23** the compact form, when the catalog outgrew one screen.
+
+**Why the blurb came out.** Twelve concepts across five headings ran to about 1,700px — the reader
+had to scroll and then remember, and "what is published here?" is the question this page exists to
+answer. A blurb is the right thing on a page someone reads; this is a page someone *scans*, and the
+mark plus the name identifies a concept to anyone who would recognise the blurb anyway. The
+sentence is still authored, still length-checked, and still shipped — as the link's `title`, so a
+hovering mouse can have it. That is deliberately a mouse-only affordance.
+
+**Everything fits the fold**: measured 900px at 1440 wide, 768px at 1366 and at 1024. Phones still
+scroll (one column, ~1,280px) — twelve cards cannot do otherwise — but that is half of what it was.
+
+The arrow went with the blurb: a 64px card is plainly one tap target, and the arrow was a hover
+affordance for the wide banner shape. `min-height: 100vh` came off `.idx` at the same time — under
+a 61px header it made the document 100vh + 61px, so the page scrolled by exactly the height of its
+own header even when the content fitted. Invisible while the catalog was long; the whole ballgame
+once it is not.
 
 **The tile has three tiers**, all on the same tinted ground: a vendor's logo (`icon`), else one of
 our house glyphs (`glyph`), else the subject's monogram. The split between the first two is not
@@ -113,15 +129,15 @@ so that card gets a cloud of our own. Linux is a glyph too, for a rendering reas
 legal one: Tux is 47 shapes and gradients that turn to mud at 32px, with a black body that
 disappears into a dark card.
 
-**One column on phones, two from 720px up.** At the 940px container a full-width card stretches one
-sentence across the whole page and reads as a banner; two columns give each card ~450px, which is a
-correct measure for the blurb. The arrow is hidden on phones — the whole card is the tap target, so
-it was only ever a hover affordance.
+**As many columns as fit** — `repeat(auto-fill, minmax(240px, 1fr))`, which is 3 at the 940px
+container, 2 on a tablet and 1 on a phone. The 240px floor is set by the longest name on the page
+("Databricks Data Engineer") staying on one line at the column width that results; a name that does
+wrap simply makes its row taller, since the grid stretches every card in a row to match.
 
 **Brand colour is restrained on purpose.** Each card sets `--tint` inline from its `tint`, and
 everything downstream reads that property: the tile ground, the monogram, the pills, the hover
-border and wash, the arrow on hover, the focus ring. Not the card background — seven saturated
-grounds side by side in a grid read as noise rather than as a system.
+border and wash, the focus ring. Not the card background — seven saturated grounds side by side in
+a grid read as noise rather than as a system.
 
 Two derived tokens do the contrast work, because a published brand colour is not a readable one.
 `--tint-ink` (the 20px monogram, where 3:1 is the bar) darkens every tint toward the page ink on
@@ -322,8 +338,10 @@ publish titles were split into each repo's `scripts/titles.json`.
    entry in `kinds`, and a genuinely new subject domain one in `groups` — those are the only
    reasons to touch anything else. Keep `apps` sorted by group: file order is render order.
 3. Give it a `blurb` and a `tint` (copy the repo's own `--brand`). Both are optional and both
-   degrade — no blurb is a bare title row, no tint is the platform accent — but a card without
-   them is the weakest one on the page, so `check` warns about a missing blurb.
+   degrade — no blurb is a card with no tooltip, no tint is the platform accent. The blurb is not
+   drawn on the card any more, but write one anyway: it is the hover text, and `check` warns
+   without it. Mark: a vendor logo or a house glyph in `icons/`, else the subject's monogram —
+   on a card that is now mark + name, the mark is half of what the reader sees.
 4. `npm run check` before pushing. `npm run check -- --links` additionally HEADs every live entry
    against graphl.in, which is what turns step 1 from a rule someone remembers into one the repo
    enforces — a live entry that does not answer 200 fails the check.
