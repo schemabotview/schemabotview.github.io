@@ -319,10 +319,13 @@ publish titles were split into each repo's `scripts/titles.json`.
 ## Notes
 
 - **Currently listed:** `aws`, `apache-spark`, `python`, `databricks-data-engineer`, `sql`, `linux`,
-  `data-warehousing`, `python-lab` — every deployed app — plus `coach` as `status: "soon"`. `linux` joined on 2026-09-01: the
-  `schemabotview/linux` repo's old graphl-studio app was replaced by the workspace concept app (8
-  courses, 80 sections), Pages was switched to the workflow build source, and `graphl.in/linux/` went
-  live before the card was added.
+  `data-warehousing`, `snowflake`, `dbt`, `python-lab` — every deployed app — plus `coach` as
+  `status: "soon"`. `dbt` joined on 2026-09-23, the day its nine courses finished recording; it has
+  no `icons/dbt.svg`, so its tile is the monogram fallback — and the acronym branch gives a full
+  "DBT", not the two-letter form, so it does not collide with Databricks' "Da" beside it.
+  `linux` joined on 2026-09-01: the `schemabotview/linux` repo's old graphl-studio app was replaced
+  by the workspace concept app (8 courses, 80 sections), Pages was switched to the workflow build
+  source, and `graphl.in/linux/` went live before the card was added.
 - **`python-lab` is a lab, not a concept app** (added 2026-09-09). Labs are the hands-on
   counterpart to a concept app of the same name — the family `aws-lab` started: `<concept>-lab`.
   A lab has no scenes, narration or course/section content, so it does not follow the per-repo

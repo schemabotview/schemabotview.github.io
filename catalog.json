@@ -41,6 +41,15 @@
       "blurb": "Dimensions, facts, keys and history — how a warehouse is designed and loaded."
     },
     {
+      "slug": "dbt",
+      "kind": "courses",
+      "group": "data",
+      "name": "dbt",
+      "subject": "dbt",
+      "tint": "#ff694a",
+      "blurb": "The T in ELT — models, ref(), materializations, tests and deployment."
+    },
+    {
       "slug": "snowflake",
       "kind": "courses",
       "group": "data",
