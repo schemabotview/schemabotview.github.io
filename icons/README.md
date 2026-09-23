@@ -21,6 +21,7 @@ vendor's own brand page where there is one, and record where each came from:
 | `snowflake.svg` | Wikimedia Commons, `Snowflake_Logo.svg` | 2026-09-22 | cropped to the mark: the 9 wordmark paths dropped, viewBox tightened to `0 0.53 43.4 43.5` |
 | `apache-spark.svg` | Wikimedia Commons, `Apache_Spark_logo.svg` (ASF mark) | 2026-09-22 | cropped to the flame: the 12 `#3c3a3e` wordmark paths dropped, leaving the one `#e25a1c` path |
 | `databricks-data-engineer.svg` | databricks.com, `db-nav-logo.svg` | 2026-09-22 | cropped to the mark: the `white` wordmark path dropped, leaving the one `#FF3621` path |
+| `dbt.svg` | getdbt.com, `img/logos/dbt-labs-logo.svg` | 2026-09-23 | cropped to the mark: the 9 `black` wordmark paths and the clip group dropped, leaving the one `#FE6703` path; viewBox tightened to `0.46 0.63 88.72 88.74` (the path's measured bbox) |
 
 **Cropping is the usual work**, because a vendor almost always publishes a horizontal lockup and
 the tile is a 32px square — a wordmark rendered into it shrinks to an illegible sliver. Crop by

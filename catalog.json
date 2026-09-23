@@ -47,6 +47,7 @@
       "name": "dbt",
       "subject": "dbt",
       "tint": "#ff694a",
+      "icon": "dbt.svg",
       "blurb": "The T in ELT — models, ref(), materializations, tests and deployment."
     },
     {
