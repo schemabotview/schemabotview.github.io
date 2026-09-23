@@ -38,10 +38,10 @@ nav on the right — and the nav items are plain `#courses` / `#labs` anchors. T
 straight after: no visible heading, description or count, since the highlighted nav item and the
 cards themselves already say all three. The `<h1>` is visually hidden, kept for structure.
 
-Cards are grouped by subject — **Languages**, **Data**, **Systems** — as headings inside the
-active tab. That is a second axis from the nav: the nav is *delivery format* (courses, labs,
-coaching), the headings are *subject domain*. A tab whose apps declare no group renders one flat
-grid instead, which is what Labs and Coach do with a single card each.
+Cards are grouped by subject — **Data**, **Languages**, **People**, **Systems** — as headings
+inside the active tab. That is a second axis from the nav: the nav is *delivery format* (courses,
+labs, coaching), the headings are *subject domain*. A tab whose apps declare no group renders one
+flat grid instead, which is what Labs and Coach do with a single card each.
 
 A card is **logo tile · title + pills · one sentence · arrow**, one column on phones and two from
 720px up. The tile carries that app's own brand colour, and so do the pills, the hover border and

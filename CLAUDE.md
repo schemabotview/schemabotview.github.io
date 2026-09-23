@@ -51,7 +51,8 @@ courses/sections: each site owns its own navigation.
 ### Two axes: kinds and groups
 
 **`kinds` is delivery format** — Courses / Labs / Coach — and it is the **header nav**. **`groups`
-is subject domain** — Languages / Data / Systems — and it is a **heading inside one kind's panel**.
+is subject domain** — Data / Languages / People / Systems — and it is a **heading inside one
+kind's panel**.
 
 They cannot swap places. Kind ids *are* the URL hash and `#courses` / `#labs` are published links,
 so the nav is not free to change; and a topic sitting in that row next to "Labs" would ask the
@@ -62,17 +63,22 @@ the other organises what the navigation landed on.
 the flat grid the page had before topics existed, which is what Labs and Coach do with one card
 each. Grouping is decided per kind, by the apps themselves.
 
-Current split, chosen because it balances (2 / 3 / 2) and keeps balancing as the scaffolded
-concepts land — Java → Languages, Docker + Kubernetes → Systems:
+Current split. The groups array is ordered alphabetically, which is also the render order of the
+headings:
 
 | | |
 |---|---|
+| **Data** | Apache Spark · Databricks Data Engineer · Data Warehousing · dbt · Snowflake |
 | **Languages** | Python · SQL |
-| **Data** | Apache Spark · Databricks Data Engineer · Data Warehousing |
+| **People** | Soft Skills |
 | **Systems** | AWS · Linux |
 
-SQL is under Languages because that is what it is, and because Data-with-four would leave Languages
-holding Python alone. It is the one debatable placement.
+Two placements are worth recording. **SQL is under Languages** because that is what it is, even
+though it pulls a card away from Data. And **People** was added for `soft-skills`, which fits none
+of the other three: the axis is subject domain, and its subject is the person rather than a
+technology. It holds one card today; `docker` and `kubernetes` land in Systems and `java` in
+Languages when they are authored, so the heading that stays thin is this one — which is fine, since
+a heading with one card still tells the reader the catalog is not only about tools.
 
 **There is no AI/ML group, deliberately.** An empty heading advertises a gap, and `coach` already
 carries the "coming" signal. Declare it on the day the first course ships — one object in `groups`,

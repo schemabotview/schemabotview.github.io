@@ -7,6 +7,7 @@
   "groups": [
     { "id": "data", "label": "Data" },
     { "id": "languages", "label": "Languages" },
+    { "id": "people", "label": "People" },
     { "id": "systems", "label": "Systems" }
   ],
   "apps": [
@@ -80,6 +81,18 @@
       "tint": "#34e0d0",
       "glyph": "sql.svg",
       "blurb": "Queries, schema and mutations — plus what the engine does with them."
+    },
+
+    {
+      "slug": "soft-skills",
+      "kind": "courses",
+      "group": "people",
+      "name": "Soft Skills",
+      "subject": "Soft Skills",
+      "status": "soon",
+      "tint": "#9d7cf4",
+      "glyph": "soft-skills.svg",
+      "blurb": "Voice, body and structure — why correct work does not land, and how to fix that."
     },
 
     {
