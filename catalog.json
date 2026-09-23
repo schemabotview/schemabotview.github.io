@@ -5,12 +5,24 @@
     { "id": "coach", "label": "Coach" }
   ],
   "groups": [
+    { "id": "ai-ml", "label": "AI/ML" },
     { "id": "data", "label": "Data" },
     { "id": "languages", "label": "Languages" },
     { "id": "people", "label": "People" },
     { "id": "systems", "label": "Systems" }
   ],
   "apps": [
+    {
+      "slug": "supervised-learning",
+      "kind": "courses",
+      "group": "ai-ml",
+      "name": "Supervised Learning",
+      "subject": "Supervised Learning",
+      "tint": "#7c5cff",
+      "glyph": "supervised-learning.svg",
+      "blurb": "Regression, classification and the fit that generalizes past the training set."
+    },
+
     {
       "slug": "apache-spark",
       "kind": "courses",
@@ -103,6 +115,16 @@
       "tint": "#f0902f",
       "glyph": "aws.svg",
       "blurb": "Compute, storage, networking and identity — how the services wire together."
+    },
+    {
+      "slug": "azure",
+      "kind": "courses",
+      "group": "systems",
+      "name": "Azure",
+      "subject": "Azure",
+      "tint": "#3aa0ff",
+      "icon": "azure.svg",
+      "blurb": "Subscriptions, identity, compute and networking — and what inherits downward."
     },
     {
       "slug": "linux",

@@ -22,6 +22,7 @@ vendor's own brand page where there is one, and record where each came from:
 | `apache-spark.svg` | Wikimedia Commons, `Apache_Spark_logo.svg` (ASF mark) | 2026-09-22 | cropped to the flame: the 12 `#3c3a3e` wordmark paths dropped, leaving the one `#e25a1c` path |
 | `databricks-data-engineer.svg` | databricks.com, `db-nav-logo.svg` | 2026-09-22 | cropped to the mark: the `white` wordmark path dropped, leaving the one `#FF3621` path |
 | `dbt.svg` | getdbt.com, `img/logos/dbt-labs-logo.svg` | 2026-09-23 | cropped to the mark: the 9 `black` wordmark paths and the clip group dropped, leaving the one `#FE6703` path; viewBox tightened to `0.46 0.63 88.72 88.74` (the path's measured bbox) |
+| `azure.svg` | Wikimedia Commons, `Microsoft_Azure.svg` | 2026-09-23 | the standalone mark, not a lockup — no wordmark to crop, used unmodified on its square `0 0 96 96` viewBox |
 
 **Cropping is the usual work**, because a vendor almost always publishes a horizontal lockup and
 the tile is a 32px square — a wordmark rendered into it shrinks to an illegible sliver. Crop by
@@ -35,8 +36,8 @@ monogram, which looks exactly like "no icon yet". Every file here must parse as 
 
 ## `glyph` — one of ours
 
-For a concept with no vendor at all (SQL, Data Warehousing, 1:1 Coaching), and for AWS, whose mark
-Amazon does not license for use as third-party course branding.
+For a concept with no vendor at all (SQL, Data Warehousing, 1:1 Coaching, Supervised Learning),
+and for AWS, whose mark Amazon does not license for use as third-party course branding.
 
 **A glyph file carries geometry only — no colour.** It is painted through CSS `mask`, which hands
 it the same `--tint-ink` the monogram uses, so it inherits the light theme's darkening without
@@ -47,6 +48,12 @@ House glyphs are one family: a 32×32 grid, outlines at stroke-width 2.2 with ro
 which sits deliberately lighter than the solid vendor marks beside them. `linux.svg` is a terminal
 rather than Tux — at 32px Tux's 47 shapes and gradients turn to mud, and its black body disappears
 into a dark card.
+
+`supervised-learning.svg` is axes + a fitted line + three scattered points, and the **scatter has
+to clear the line by more than a stroke width**. The first draft put the points near the fit, which
+is what a real regression looks like and what nobody can see at 32px: a 2.2 stroke plus a r=1 dot
+is ~4px of ink, so points within ~3 units of the line merge into it and the tile reads as one lumpy
+diagonal. Drawn wide of the line, the same three marks read as data-with-a-fit.
 
 ## Both
 

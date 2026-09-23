@@ -68,10 +68,11 @@ headings:
 
 | | |
 |---|---|
+| **AI/ML** | Supervised Learning |
 | **Data** | Apache Spark · Databricks Data Engineer · Data Warehousing · dbt · Snowflake |
 | **Languages** | Python · SQL |
 | **People** | Soft Skills |
-| **Systems** | AWS · Linux |
+| **Systems** | AWS · Azure · Linux |
 
 Two placements are worth recording. **SQL is under Languages** because that is what it is, even
 though it pulls a card away from Data. And **People** was added for `soft-skills`, which fits none
@@ -80,10 +81,15 @@ technology. It holds one card today; `docker` and `kubernetes` land in Systems a
 Languages when they are authored, so the heading that stays thin is this one — which is fine, since
 a heading with one card still tells the reader the catalog is not only about tools.
 
-**There is no AI/ML group, deliberately.** An empty heading advertises a gap, and `coach` already
-carries the "coming" signal. Declare it on the day the first course ships — one object in `groups`,
-one field on the app. `npm run check` warns about a declared group nobody is in, so an aspirational
-heading cannot be left behind by accident.
+**AI/ML was declared on 2026-09-23**, the day `supervised-learning` was listed — the rule the old
+note set ("declare it on the day the first course ships") being met, not waived. It held no group
+before that, deliberately: an empty heading advertises a gap. `npm run check` still warns about a
+declared group nobody is in, so the next aspirational heading cannot be left behind by accident.
+
+**It is ordered first, ahead of Data.** The groups array is alphabetical and `ai-ml` sorts there
+anyway, so nothing special is being done — but the render order *is* the array order, and this is
+the group the catalog is growing into (`deep-learning` and `unsupervised-learning` are the two
+repos beside `supervised-learning`), so first is also where it should read.
 
 Order within a group is **file order**, so `apps` is kept sorted by group to match what renders.
 
@@ -324,13 +330,20 @@ publish titles were split into each repo's `scripts/titles.json`.
 
 ## Notes
 
-- **Currently listed:** `aws`, `apache-spark`, `python`, `databricks-data-engineer`, `sql`, `linux`,
-  `data-warehousing`, `snowflake`, `dbt`, `python-lab` — every deployed app — plus `coach` as
-  `status: "soon"`. `dbt` joined on 2026-09-23, the day its nine courses finished recording; it
-  wore the monogram for a few hours, until `icons/dbt.svg` landed the same day.
+- **Currently listed:** `aws`, `azure`, `apache-spark`, `python`, `databricks-data-engineer`, `sql`,
+  `linux`, `data-warehousing`, `snowflake`, `dbt`, `supervised-learning`, `python-lab` — every
+  deployed app — plus `coach` as `status: "soon"`. `dbt` joined on 2026-09-23, the day its nine
+  courses finished recording; it wore the monogram for a few hours, until `icons/dbt.svg` landed
+  the same day.
   `linux` joined on 2026-09-01: the `schemabotview/linux` repo's old graphl-studio app was replaced
   by the workspace concept app (8 courses, 80 sections), Pages was switched to the workflow build
   source, and `graphl.in/linux/` went live before the card was added.
+- **`supervised-learning` and `azure` joined on 2026-09-23**, on the owner's instruction, and both
+  are listed **earlier in their authoring than any card before them** — supervised-learning has 2
+  of 7 courses written (its own CLAUDE.md had recorded "no catalog entry yet. Deliberate."), azure
+  1 of 11. Both serve 200 at `graphl.in/<slug>/`, so the deploy-first rule holds; what is new is
+  that a card can now point at an arc that is mostly declared rather than mostly written. Neither
+  has narration audio yet.
 - **`python-lab` is a lab, not a concept app** (added 2026-09-09). Labs are the hands-on
   counterpart to a concept app of the same name — the family `aws-lab` started: `<concept>-lab`.
   A lab has no scenes, narration or course/section content, so it does not follow the per-repo
@@ -341,8 +354,13 @@ publish titles were split into each repo's `scripts/titles.json`.
 - This repo previously held a **built SPA** (an older GraphL catalog); it was replaced by this static
   site on request. The old build is recoverable from git history if ever needed.
 - **Every card has a mark** as of 2026-09-22 — the `icons/` folder was empty until then and every
-  card was a monogram. Four vendor logos over five cards (`python.svg` serves Python and Python Lab
-  both · Snowflake · Apache Spark · Databricks) and five house glyphs (AWS · SQL · Data Warehousing
-  · Linux · Coach). The monogram path is still live and still the fallback for the next concept to
-  land.
+  card was a monogram. Six vendor logos over seven cards (`python.svg` serves Python and Python Lab
+  both · Snowflake · Apache Spark · Databricks · dbt · Azure) and six house glyphs (AWS · SQL ·
+  Data Warehousing · Linux · Coach · Supervised Learning). The monogram path is still live and
+  still the fallback for the next concept to land.
+- **Azure wears the vendor mark, AWS does not** — the asymmetry is deliberate and is about the
+  licences, not about consistency. Microsoft publishes the Azure "A" as a standalone mark and it
+  renders cleanly at 32px; Amazon does not license the AWS mark for third-party course branding,
+  which is why that card carries a cloud of our own. If Microsoft's guidelines are ever read the
+  same way, swapping `"icon": "azure.svg"` for a glyph is a one-field change.
 - Working agreement (inherited): one reviewed slice at a time; explain before writing.
