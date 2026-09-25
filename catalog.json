@@ -75,6 +75,17 @@
     },
 
     {
+      "slug": "data-systems",
+      "kind": "courses",
+      "group": "data",
+      "name": "Data Systems",
+      "subject": "Data Systems",
+      "tint": "#e8489b",
+      "glyph": "data-systems.svg",
+      "blurb": "How databases really work: storage engines, replication, partitioning and consensus."
+    },
+
+    {
       "slug": "python",
       "kind": "courses",
       "group": "languages",
