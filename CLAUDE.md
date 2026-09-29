@@ -348,11 +348,14 @@ publish titles were split into each repo's `scripts/titles.json`.
 
 ## Notes
 
-- **Currently listed:** `aws`, `azure`, `apache-spark`, `python`, `databricks-data-engineer`, `sql`,
+- **Currently listed:** `aws`, `azure`, `apache-spark-ct`, `python`, `databricks-data-engineer`, `sql`,
   `linux`, `data-warehousing`, `snowflake`, `dbt`, `supervised-learning`, `python-lab` — every
   deployed app — plus `coach` as `status: "soon"`. `dbt` joined on 2026-09-23, the day its nine
   courses finished recording; it wore the monogram for a few hours, until `icons/dbt.svg` landed
   the same day.
+  The Spark entry was repointed from `apache-spark` to `apache-spark-ct` on 2026-09-29 — same
+  card, same icon, same tint; the five-course site it used to link is still deployed, just no
+  longer reachable from here.
   `linux` joined on 2026-09-01: the `schemabotview/linux` repo's old graphl-studio app was replaced
   by the workspace concept app (8 courses, 80 sections), Pages was switched to the workflow build
   source, and `graphl.in/linux/` went live before the card was added.
