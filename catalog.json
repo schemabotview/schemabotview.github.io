@@ -24,14 +24,14 @@
     },
 
     {
-      "slug": "apache-spark",
+      "slug": "apache-spark-ct",
       "kind": "courses",
       "group": "data",
       "name": "Apache Spark",
       "subject": "Apache Spark",
       "tint": "#e25a1c",
       "icon": "apache-spark.svg",
-      "blurb": "How a Spark job really runs: the API, the architecture and streaming."
+      "blurb": "How Spark actually works inside: the scheduler, the shuffle, Catalyst, Tungsten and AQE."
     },
     {
       "slug": "databricks-data-engineer",
