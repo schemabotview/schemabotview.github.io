@@ -24,7 +24,7 @@
     },
 
     {
-      "slug": "apache-spark-ct",
+      "slug": "apache-spark",
       "kind": "courses",
       "group": "data",
       "name": "Apache Spark",
