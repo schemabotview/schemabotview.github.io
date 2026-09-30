@@ -62,7 +62,7 @@ CNAME            graphl.in   (the custom domain — do not delete)
 .nojekyll        serve files as-is (no Jekyll)
 index.html       site header (brand + nav + theme button) + catalog mount
 styles.css       light + dark theme tokens (matches the concept apps)
-theme.js         three-state theme control (system / light / dark)
+theme.js         theme control — a dark/light flip, plus the OS-driven undecided state
 auth.js          Google sign-in + account menu + subscription state
 firebase-config.js  public Firebase web config (shared project) and pinned SDK URL
 app.js           fetch the active section's file → render one card per entry
@@ -91,10 +91,12 @@ full-width row that scrolls sideways rather than collapsing into a menu. Verifie
 
 ## Theme
 
-Light, dark, or follow the OS — the button in the header cycles system → light → dark. The choice
-is kept in `localStorage['graphl:theme']` and applied before first paint, so there is no flash of
-the wrong background on load. Because every GraphL app is same-origin under `graphl.in`, that one
-key is enough for a concept app to inherit the same choice.
+The button in the header flips dark ⇄ light, the same control every concept app ships. Until you
+press it nothing is stored and the page follows your OS, so a first visit arrives in whichever
+theme you already use. The choice is kept in `localStorage['graphl:theme']` and applied before
+first paint, so there is no flash of the wrong background on load. Because every GraphL app is
+same-origin under `graphl.in`, that one key is enough for a concept app to inherit the same
+choice.
 
 ## Run locally
 

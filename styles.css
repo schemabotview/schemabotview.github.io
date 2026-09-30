@@ -34,10 +34,13 @@
 }
 
 /* ── Theme ────────────────────────────────────────────────────────────────────────────────────
-   Three states. No stored choice means "system", and the OS decides; an explicit choice stamps
-   data-theme="light" or "dark" on <html> and wins over the OS in both directions. index.html runs
-   a tiny blocking script in <head> that applies the stored value before first paint, or the page
-   flashes the wrong ground on every load.
+   Two stored values, light and dark, plus the absence of one. No stored choice means the OS
+   decides via prefers-color-scheme; an explicit choice stamps data-theme="light" or "dark" on
+   <html> and wins over the OS in both directions. The BUTTON only ever flips between the two
+   explicit values — it stopped cycling back to the undecided state on 2026-09-30, to match every
+   concept app — but the selectors below still have to handle the absence, because that is what a
+   first visit is. index.html runs a tiny blocking script in <head> that applies the stored value
+   before first paint, or the page flashes the wrong ground on every load.
 
    The dark palette is written out twice on purpose — once for the OS preference, once for the
    explicit toggle. Plain CSS cannot share one block between a media query and an attribute

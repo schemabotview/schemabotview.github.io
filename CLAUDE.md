@@ -203,12 +203,37 @@ eight kinds injected the *nav* scrolls while the page still does not.
 
 ### Theme
 
-Three states: **system** (no stored value — the OS decides via `prefers-color-scheme`) plus
-explicit **light** and **dark**, which override the OS in both directions. The header button cycles
-system → light → dark.
+**The button is a two-state flip, dark ⇄ light** — the same control every concept app ships. Two
+values are ever stored, **light** and **dark**, and each overrides the OS in both directions.
 
-- The switch is `data-theme="light" | "dark"` on `<html>`; **system means no attribute at all**.
-- The choice is `localStorage['graphl:theme']`; choosing system **removes** the key.
+**There is still a third state; the button just cannot reach it.** With nothing stored the page
+follows the OS via `prefers-color-scheme`, which is what a first visit gets, and `theme.js` leaves
+the attribute off so the media query keeps deciding. What changed on **2026-09-30** is only that
+the cycle no longer walks back to it.
+
+**Why it came out.** The catalog cycled system → light → dark until then, and it was the only
+surface on the platform that did: `ui-shell/src/useTheme.ts` and python-lab's hand-port of it were
+both two-state already, so the one page a reader meets first behaved unlike every page it links to.
+The third step also costs a press to get where you were going, and has to be labelled something
+("System theme") that is about the machine rather than about the page.
+
+**The glyph resolves, it does not read storage.** With no choice stored the button shows ☾ on a
+dark OS and ☀ on a light one — never a state-of-its-own symbol — and a press flips *what is on
+screen*, so the first press always changes the page. `◐` is gone with the cycle. A
+`prefers-color-scheme` listener re-renders the glyph when the OS moves under an undecided reader:
+the ground moves on its own because the media query is CSS, but the glyph is JavaScript's to keep
+honest, and without that listener the button would sit claiming the opposite of the page behind it.
+
+This mirrors `ui-shell`'s split rather than breaking from it. There the absence resolves to the
+**deck's** theme, because a deck is authored and a reader's OS should not silently repaint it; here
+it resolves to the **OS**, because a directory page has no authored look to protect. The stored
+values are identical either way, so the two apps can never disagree about an explicit choice —
+only about what the absence means, which is a difference that was always there.
+
+- The switch is `data-theme="light" | "dark"` on `<html>`; **no stored choice means no attribute**.
+- The choice is `localStorage['graphl:theme']`. Nothing writes `system` and nothing removes the key
+  any more — **but `readStored()` must keep treating any other value, including a stale `system`
+  left by the old build, as "nothing chosen"**, or a returning reader gets a broken toggle.
 - `index.html` carries a tiny **blocking inline script** in `<head>` that applies a stored choice
   before first paint. It cannot be a module or deferred — the page would flash the wrong ground on
   every load. Keep it inline and keep it first.
@@ -257,7 +282,7 @@ CNAME         graphl.in   ← the custom domain. DO NOT DELETE (removing it brea
 index.html    site header (brand + empty nav + theme button) + <div id="catalog"> panel
               …plus the blocking inline theme boot in <head>
 styles.css    light + dark tokens, matches the concept apps (.site* header, .idx* page + cards)
-theme.js      the three-state theme control (system / light / dark)
+theme.js      the theme control — a dark/light flip, plus the undecided state the OS drives
 auth.js       Google sign-in, the account menu, and the shared subscription
 firebase-config.js  the EXISTING project's public web config + the pinned SDK URL
 app.js        fetch the active section's file → render one link card per entry (→ /<slug>/)
