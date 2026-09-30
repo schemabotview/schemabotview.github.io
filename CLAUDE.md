@@ -70,16 +70,17 @@ headings:
 |---|---|
 | **AI/ML** | Supervised Learning |
 | **Data** | Apache Spark · Databricks Data Engineer · Data Warehousing · dbt · Snowflake |
-| **Languages** | Python · SQL |
+| **Languages** | Java · Python · SQL |
 | **People** | Soft Skills |
-| **Systems** | AWS · Azure · Linux |
+| **Systems** | AWS · Azure · Docker · Linux |
 
 Two placements are worth recording. **SQL is under Languages** because that is what it is, even
 though it pulls a card away from Data. And **People** was added for `soft-skills`, which fits none
 of the other three: the axis is subject domain, and its subject is the person rather than a
-technology. It holds one card today; `docker` and `kubernetes` land in Systems and `java` in
-Languages when they are authored, so the heading that stays thin is this one — which is fine, since
-a heading with one card still tells the reader the catalog is not only about tools.
+technology. It holds one card today, and now permanently: `java` landed in Languages and `docker`
+in Systems on 2026-09-30, and `kubernetes` joins Systems when it is authored, so People is the
+heading that stays thin — which is fine, since a heading with one card still tells the reader the
+catalog is not only about tools.
 
 **AI/ML was declared on 2026-09-23**, the day `supervised-learning` was listed — the rule the old
 note set ("declare it on the day the first course ships") being met, not waived. It held no group
@@ -349,10 +350,10 @@ publish titles were split into each repo's `scripts/titles.json`.
 ## Notes
 
 - **Currently listed:** `aws`, `azure`, `apache-spark`, `python`, `databricks-data-engineer`, `sql`,
-  `linux`, `data-warehousing`, `snowflake`, `dbt`, `supervised-learning`, `python-lab` — every
-  deployed app — plus `coach` as `status: "soon"`. `dbt` joined on 2026-09-23, the day its nine
-  courses finished recording; it wore the monogram for a few hours, until `icons/dbt.svg` landed
-  the same day.
+  `linux`, `data-warehousing`, `snowflake`, `dbt`, `supervised-learning`, `java`, `python-lab` —
+  every deployed app — plus `docker` and `coach` as `status: "soon"`. `dbt` joined on 2026-09-23,
+  the day its nine courses finished recording; it wore the monogram for a few hours, until
+  `icons/dbt.svg` landed the same day.
   The Spark entry moved twice on 2026-09-29 and ended where it started: repointed to
   `apache-spark-ct`, then back to `apache-spark` once the old five-course repo was DELETED from
   GitHub and the 15-course repo was renamed onto its name. The slug is unchanged from where it
@@ -361,6 +362,16 @@ publish titles were split into each repo's `scripts/titles.json`.
   `linux` joined on 2026-09-01: the `schemabotview/linux` repo's old graphl-studio app was replaced
   by the workspace concept app (8 courses, 80 sections), Pages was switched to the workflow build
   source, and `graphl.in/linux/` went live before the card was added.
+- **`java` and `docker` joined on 2026-09-30.** `java` is live — all 12 courses authored, pushed
+  to `schemabotview/java` and serving 200 at `graphl.in/java/` (narration is still generating,
+  which the catalog does not care about). `docker` is `status: "soon"`: the app is authored but
+  is not a git repo and is deployed nowhere, so the card is non-clickable and `--links` skips it.
+  **The `docker` slug is a claim, not a fact.** It was chosen by the owner over the `docker-app`
+  fallback, which commits to the `apache-spark`/`java` precedent — bundle `schemabotview/docker`
+  (the notebook quarry) to `~/.archive/`, delete it from GitHub, and publish the app under the clean
+  name. None of that has been done. Until it is, `graphl.in/docker/` 404s; the card must stay
+  `soon`, and dropping that field before the repo exists is what would ship a broken link.
+  Both wear **house glyphs**, not vendor marks — see `icons/README.md`.
 - **`supervised-learning` and `azure` joined on 2026-09-23**, on the owner's instruction, and both
   are listed **earlier in their authoring than any card before them** — supervised-learning has 2
   of 7 courses written (its own CLAUDE.md had recorded "no catalog entry yet. Deliberate."), azure

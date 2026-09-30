@@ -37,7 +37,11 @@ monogram, which looks exactly like "no icon yet". Every file here must parse as 
 ## `glyph` — one of ours
 
 For a concept with no vendor at all (SQL, Data Warehousing, 1:1 Coaching, Supervised Learning),
-and for AWS, whose mark Amazon does not license for use as third-party course branding.
+and for AWS, whose mark Amazon does not license for use as third-party course branding. **Java is
+here for the same reason as AWS** — Oracle does not license the coffee-cup mark for third-party
+course branding, so that card gets a cup of our own. **Docker is here by choice, not necessity**:
+Docker's whale is licensable, but it is a detailed illustration that muddies at 32px the way Tux
+does, and three crates riding a wave says "containers" at tile size where the whale does not.
 
 **A glyph file carries geometry only — no colour.** It is painted through CSS `mask`, which hands
 it the same `--tint-ink` the monogram uses, so it inherits the light theme's darkening without
@@ -45,15 +49,25 @@ which the pale brands (SQL's cyan, Linux's yellow) wash out on a white ground. A
 read a custom property, and a colour baked into the file would fail one theme or the other.
 
 House glyphs are one family: a 32×32 grid, outlines at stroke-width 2.2 with round caps and joins,
-which sits deliberately lighter than the solid vendor marks beside them. `linux.svg` is a terminal
-rather than Tux — at 32px Tux's 47 shapes and gradients turn to mud, and its black body disappears
-into a dark card.
+which sits deliberately lighter than the solid vendor marks beside them. **Stroke width is the
+budget every one of these is drawn against**: at 32px a 2.2 stroke is ~7% of the tile, so any
+detail narrower than about 2 units closes up into solid ink. `java.svg`'s steam was drawn twice
+for exactly this — the first pair of curls swung ±0.75 and rendered as two straight ticks, so
+they were widened to ±1.5 and spaced 7.5 apart before they read as steam, not as tally marks.
+
+`linux.svg` is a terminal rather than Tux — at 32px Tux's 47 shapes and gradients turn to mud,
+and its black body disappears into a dark card.
 
 `supervised-learning.svg` is axes + a fitted line + three scattered points, and the **scatter has
 to clear the line by more than a stroke width**. The first draft put the points near the fit, which
 is what a real regression looks like and what nobody can see at 32px: a 2.2 stroke plus a r=1 dot
 is ~4px of ink, so points within ~3 units of the line merge into it and the tile reads as one lumpy
 diagonal. Drawn wide of the line, the same three marks read as data-with-a-fit.
+
+`docker.svg` is three crates over a two-hump wave. The top crate's lower edge and the bottom pair's
+upper edges sit 1.5 apart, which is inside the stroke — they merge into one line on purpose, the
+way stacked crates share a face. That is the one place in this folder where strokes are allowed to
+touch.
 
 ## Both
 

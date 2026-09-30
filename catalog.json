@@ -86,6 +86,16 @@
     },
 
     {
+      "slug": "java",
+      "kind": "courses",
+      "group": "languages",
+      "name": "Java",
+      "subject": "Java",
+      "tint": "#5382a1",
+      "glyph": "java.svg",
+      "blurb": "Objects, generics, collections and virtual threads \u2014 and the JVM underneath."
+    },
+    {
       "slug": "python",
       "kind": "courses",
       "group": "languages",
@@ -136,6 +146,17 @@
       "tint": "#3aa0ff",
       "icon": "azure.svg",
       "blurb": "Subscriptions, identity, compute and networking — and what inherits downward."
+    },
+    {
+      "slug": "docker",
+      "kind": "courses",
+      "group": "systems",
+      "name": "Docker",
+      "subject": "Docker",
+      "status": "soon",
+      "tint": "#1d63ed",
+      "glyph": "docker.svg",
+      "blurb": "Images, layers, namespaces and cgroups \u2014 what a container actually is."
     },
     {
       "slug": "linux",
