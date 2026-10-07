@@ -72,7 +72,7 @@ headings:
 | **Data** | Apache Spark · Databricks Data Engineer · Data Warehousing · dbt · Snowflake |
 | **Languages** | Java · Python · SQL |
 | **People** | Soft Skills |
-| **Systems** | AWS · Azure · Docker · Linux |
+| **Systems** | AWS · Azure · Docker · Linux · System Design |
 
 Two placements are worth recording. **SQL is under Languages** because that is what it is, even
 though it pulls a card away from Data. And **People** was added for `soft-skills`, which fits none
@@ -375,8 +375,8 @@ publish titles were split into each repo's `scripts/titles.json`.
 ## Notes
 
 - **Currently listed:** `aws`, `azure`, `apache-spark`, `python`, `databricks-data-engineer`, `sql`,
-  `linux`, `data-warehousing`, `snowflake`, `dbt`, `supervised-learning`, `java`, `python-lab` —
-  every deployed app — plus `docker` and `coach` as `status: "soon"`. `dbt` joined on 2026-09-23,
+  `linux`, `data-warehousing`, `snowflake`, `dbt`, `supervised-learning`, `java`, `system-design`,
+  `python-lab` — every deployed app — plus `docker` and `coach` as `status: "soon"`. `dbt` joined on 2026-09-23,
   the day its nine courses finished recording; it wore the monogram for a few hours, until
   `icons/dbt.svg` landed the same day.
   The Spark entry moved twice on 2026-09-29 and ended where it started: repointed to
@@ -387,6 +387,15 @@ publish titles were split into each repo's `scripts/titles.json`.
   `linux` joined on 2026-09-01: the `schemabotview/linux` repo's old graphl-studio app was replaced
   by the workspace concept app (8 courses, 80 sections), Pages was switched to the workflow build
   source, and `graphl.in/linux/` went live before the card was added.
+- **`system-design` joined and `data-systems` left on 2026-10-07**, on the owner's instruction.
+  `system-design` (8 courses, 56 sections, all authored) went in as `status: "soon"` while Pages was
+  not yet enabled on its repo — the deploy-first rule — and was flipped live once its Pages
+  workflow succeeded. It sits in **Systems** and wears a house glyph (`icons/system-design.svg`:
+  one box over two, joined — an architecture sketch). `data-systems` was removed from `apps`
+  together with `icons/data-systems.svg`; the `schemabotview/data-systems` repo is not touched
+  and `graphl.in/data-systems/` is simply no longer linked. `npm run check -- --links` returns 403
+  for every live entry from the agent sandbox (its proxy blocks graphl.in), so it only proves
+  anything when run from a normal machine.
 - **`java` and `docker` joined on 2026-09-30.** `java` is live — all 12 courses authored, pushed
   to `schemabotview/java` and serving 200 at `graphl.in/java/` (narration is still generating,
   which the catalog does not care about). `docker` is `status: "soon"`: the app is authored but

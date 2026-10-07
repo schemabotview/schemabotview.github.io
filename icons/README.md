@@ -36,7 +36,7 @@ monogram, which looks exactly like "no icon yet". Every file here must parse as 
 
 ## `glyph` — one of ours
 
-For a concept with no vendor at all (SQL, Data Warehousing, 1:1 Coaching, Supervised Learning),
+For a concept with no vendor at all (SQL, Data Warehousing, 1:1 Coaching, Supervised Learning, System Design),
 and for AWS, whose mark Amazon does not license for use as third-party course branding. **Java is
 here for the same reason as AWS** — Oracle does not license the coffee-cup mark for third-party
 course branding, so that card gets a cup of our own. **Docker is here by choice, not necessity**:
