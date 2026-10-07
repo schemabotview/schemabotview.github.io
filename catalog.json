@@ -164,7 +164,6 @@
       "group": "systems",
       "name": "System Design",
       "subject": "System Design",
-      "status": "soon",
       "tint": "#3fb6a8",
       "glyph": "system-design.svg",
       "blurb": "Requirements to architecture: estimates, trade-offs and ten systems designed end to end."
