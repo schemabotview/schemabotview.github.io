@@ -75,17 +75,6 @@
     },
 
     {
-      "slug": "data-systems",
-      "kind": "courses",
-      "group": "data",
-      "name": "Data Systems",
-      "subject": "Data Systems",
-      "tint": "#e8489b",
-      "glyph": "data-systems.svg",
-      "blurb": "How databases really work: storage engines, replication, partitioning and consensus."
-    },
-
-    {
       "slug": "java",
       "kind": "courses",
       "group": "languages",
@@ -167,6 +156,18 @@
       "tint": "#f2b632",
       "glyph": "linux.svg",
       "blurb": "The shell, the filesystem, processes and the kernel underneath them."
+    },
+
+    {
+      "slug": "system-design",
+      "kind": "courses",
+      "group": "systems",
+      "name": "System Design",
+      "subject": "System Design",
+      "status": "soon",
+      "tint": "#3fb6a8",
+      "glyph": "system-design.svg",
+      "blurb": "Requirements to architecture: estimates, trade-offs and ten systems designed end to end."
     },
 
     {
