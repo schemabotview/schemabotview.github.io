@@ -13,18 +13,7 @@
   ],
   "apps": [
     {
-      "slug": "supervised-learning",
-      "kind": "courses",
-      "group": "ai-ml",
-      "name": "Supervised Learning",
-      "subject": "Supervised Learning",
-      "tint": "#7c5cff",
-      "glyph": "supervised-learning.svg",
-      "blurb": "Regression, classification and the fit that generalizes past the training set."
-    },
-
-    {
-      "slug": "apache-spark",
+      "slug": "apache-spark-ct",
       "kind": "courses",
       "group": "data",
       "name": "Apache Spark",
@@ -34,7 +23,7 @@
       "blurb": "How Spark actually works inside: the scheduler, the shuffle, Catalyst, Tungsten and AQE."
     },
     {
-      "slug": "databricks-data-engineer",
+      "slug": "databricks-data-engineer-ct",
       "kind": "courses",
       "group": "data",
       "name": "Databricks Data Engineer",
@@ -44,17 +33,7 @@
       "blurb": "Ingestion, Delta, jobs and governance — the certification, end to end."
     },
     {
-      "slug": "data-warehousing",
-      "kind": "courses",
-      "group": "data",
-      "name": "Data Warehousing",
-      "subject": "Data Warehousing",
-      "tint": "#5b8cff",
-      "glyph": "data-warehousing.svg",
-      "blurb": "Dimensions, facts, keys and history — how a warehouse is designed and loaded."
-    },
-    {
-      "slug": "dbt",
+      "slug": "dbt-ct",
       "kind": "courses",
       "group": "data",
       "name": "dbt",
@@ -64,11 +43,12 @@
       "blurb": "The T in ELT — models, ref(), materializations, tests and deployment."
     },
     {
-      "slug": "snowflake",
+      "slug": "snowflake-ct",
       "kind": "courses",
       "group": "data",
       "name": "Snowflake",
       "subject": "Snowflake",
+      "status": "soon",
       "tint": "#29b5e8",
       "icon": "snowflake.svg",
       "blurb": "Storage split from compute — warehouses, loading, sharing and Cortex."
@@ -85,7 +65,7 @@
       "blurb": "Objects, generics, collections and virtual threads \u2014 and the JVM underneath."
     },
     {
-      "slug": "python",
+      "slug": "python-ct",
       "kind": "courses",
       "group": "languages",
       "name": "Python",
@@ -106,18 +86,7 @@
     },
 
     {
-      "slug": "soft-skills",
-      "kind": "courses",
-      "group": "people",
-      "name": "Soft Skills",
-      "subject": "Soft Skills",
-      "tint": "#9d7cf4",
-      "glyph": "soft-skills.svg",
-      "blurb": "Voice, body and structure — why correct work does not land, and how to fix that."
-    },
-
-    {
-      "slug": "aws",
+      "slug": "aws-ct",
       "kind": "courses",
       "group": "systems",
       "name": "AWS",
@@ -127,7 +96,7 @@
       "blurb": "Compute, storage, networking and identity — how the services wire together."
     },
     {
-      "slug": "azure",
+      "slug": "azure-ct",
       "kind": "courses",
       "group": "systems",
       "name": "Azure",
@@ -137,7 +106,7 @@
       "blurb": "Subscriptions, identity, compute and networking — and what inherits downward."
     },
     {
-      "slug": "docker",
+      "slug": "docker-ct",
       "kind": "courses",
       "group": "systems",
       "name": "Docker",
@@ -148,7 +117,7 @@
       "blurb": "Images, layers, namespaces and cgroups \u2014 what a container actually is."
     },
     {
-      "slug": "linux",
+      "slug": "linux-ct",
       "kind": "courses",
       "group": "systems",
       "name": "Linux",
